@@ -10,7 +10,7 @@ As I've been getting back into Creatures, I've noticed a couple of issues that m
 ### Creatures 3 (Without Docking Station)
 At this point, Docking Station should work just fine. Plain Creatures 3, however, has a couple of issues we'll need to correct.
 
-1. Navigate to `C:\YOUR_USERNAME\Documents\Creatures\Creatures 3`
+1. Navigate to `C:\Users\YOUR_USERNAME\Documents\Creatures\Creatures 3`
 2. Find `engine.exe` and right-click on it. Go to 'Properties' and click the 'Compatibility' tab.
 3. Check the 'Run this program in compatibility mode for:' box and choose 'Windows XP' from the drop-down menu.
 4. Check the 'Reduced color mode' box and choose '16-bit' from the drop-down menu. Click Ok.
