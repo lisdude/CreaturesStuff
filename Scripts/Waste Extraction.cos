@@ -1,0 +1,45 @@
+***
+* Waste Extraction
+* v1.0
+*
+* When profiling a long-running world that had been lagging and crashing,
+* I noticed grazer waste (2 10 6) had an agent count of 22739.1. Not great!
+* So this script will run roughly every five minutes to make sure we only maintain
+* around 45. I don't know how much grazer waste you NEED to have but 45 seems plenty...
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2021-05-07
+***
+
+new: simp 1 1 41601 "blnk" 0 0 0
+* Hiding shouldn't be necessary since it's not moved anywhere, but... who knows.
+attr 16
+
+* Every five minutes (or so)
+tick 3000
+
+scrp 1 1 41601 9
+* The total waste count:
+	setv va01 totl 2 10 6
+	doif va01 > 45
+* Find how many we need to remove:
+		subv va01 45
+* Set our counter!
+		setv va02 0
+* Iterate through the grazer waste and remove the excess.
+		enum 2 10 6
+			doif va02 < va01
+				doif targ ne null
+					addv va02 1
+					kill targ
+				endi
+			endi
+		next
+	endi
+endm
+
+rscr
+enum 1 1 41601
+	kill targ
+next
+scrx 1 1 41601 9
