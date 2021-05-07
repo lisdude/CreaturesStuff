@@ -1,6 +1,6 @@
 ***
 * Waste Extraction
-* v1.0
+* v1.1
 *
 * When profiling a long-running world that had been lagging and crashing,
 * I noticed grazer waste (2 10 6) had an agent count of 22739.1. Not great!
@@ -24,13 +24,11 @@ scrp 1 1 41601 9
 	doif va01 > 45
 * Find how many we need to remove:
 		subv va01 45
-* Set our counter!
-		setv va02 0
 * Iterate through the grazer waste and remove the excess.
 		enum 2 10 6
-			doif va02 < va01
+			doif va01 > 0
 				doif targ ne null
-					addv va02 1
+					subv va01 1
 					kill targ
 				endi
 			endi
