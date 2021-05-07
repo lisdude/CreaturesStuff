@@ -1,6 +1,6 @@
 ***
-* Talk to the Hand
-* v1.0
+* Creature Finder
+* v1.1
 *
 * Allows you to type simple commands to the hand to find specific creatures by name:
 *   goto <name>		Move the camera to the creature named <name>.
@@ -11,16 +11,16 @@
 * Excessively commented as a learning reminder. This is my first time working with CAOS.
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2021-05-04
+* Last Modified: 2021-05-07
 ***
 
-new: simp 1 1 13816 "blnk" 0 0 0
+new: simp 1 2 41600 "blnk" 0 0 0
 * Set the input mask. We're only listening for Raw Key Down (1)
 imsk 1
 * Hide from the creatures. Nothing to see here...
 attr 16
 
-scrp 1 1 13816 73
+scrp 1 2 41600 73
 * Wait until the user hits 'enter' (keycode 13)
 	doif _p1_ eq 13
 
@@ -39,8 +39,8 @@ scrp 1 1 13816 73
 		setv va03 0
 ******************
 
-* We have to wait a tick (ha! haha! hahaha!) for the speech bubble to appear, I guess.
-		wait 3
+* Give up our timeslice so that the speech bubble will run first and actually get created.
+		wait 0
 * Enumerate through all speech bubbles until we find something worthwhile.
 * This is moderately annoying because it will include all creature speech bubbles, not just the hand. Don't know how to do better.
 		inst
@@ -50,7 +50,7 @@ scrp 1 1 13816 73
 * We need to reference the length of ptxt (speech bubble text) a couple of times, so store it.
 				setv va04 strl ptxt
 * Check if we're being given a command and, if so, set appropriate flags. This is a lot of length checking and string splicing.
-** So... does AND evaluate BOTH sides even if the left is false? This crashes if I combine the length check with the substring check... (maybe I'm missing something)
+* This looks a bit... verbose... because AND apparently evaluates both sides regardless of whether the left is true or not.
 				doif va04 ge 5
 					doif lowa subs ptxt 1 5 eq "hold "
 * Set our 'interested name' variable (va02) to bubble[5..$] after subtracting the length of our command from the total length.
@@ -95,26 +95,21 @@ scrp 1 1 13816 73
 			enum 4 0 0
 * Check our 'break' flag. If we're done, no sense in doing more string comparisons.
 				doif va01 eq 0
-* Set va04 to the creature's name.
-					sets va04 lowa hist name gtos 0
-* Check if the name (va04) matches the name given in the speech bubble (va02)
-					doif va04 eq va02
-* break;
+* Check if the name matches the name given in the speech bubble (va02)
+					doif lowa hist name gtos 0 eq va02
 						setv va01 1
-* Change the active creature if we're not summoning.
-						doif va03 ne 4
+						doif va03 eq 3
+* Goto: Just change the active creature. Done!
 							norn targ
-						endi
-						doif va03 eq 1
+						elif va03 eq 1
 * Hold its hand.
 							mesg writ targ 13
 						elif va03 eq 2 or va03 eq 4
-* Pick it up.
+* Pick it up either by summoning or getting.
 							doif va03 eq 2
-* If this isn't a summon, we have to wait for the active creature to get set. Otherwise it teleports.
-								wait 3
+* If we're getting, center the camera on the target.
+								cmrt 0
 							endi
-							inst
 * Kind of a kludge, but it works. The default behavior for right-clicking a creature is to hold its hand.
 * Here we temporarily override that setting so that right-clicking picks it up.
 							setv va04 game "engine_creature_pickup_status"
@@ -122,7 +117,7 @@ scrp 1 1 13816 73
 							rgam
 * Sent a message to ID 1000 (DS Pointer scripts.cos) saying pntr (hand) wants to pick this creature up.
 							mesg wrt+ pntr 1000 targ null 0
-							wait 5
+							wait 0
 							inst
 							setv game "engine_creature_pickup_status" va04
 							rgam
@@ -136,9 +131,8 @@ endm
 
 * Removal script. 
 rscr
-enum 1 1 13816
+enum 1 2 41600
 	kill targ
 next
-* Remove from scriptorium. In theory. It doesn't actually seem to do anything...
-scrx 1 1 13816 73
-*dbg: poll
+* Remove from scriptorium.
+scrx 1 2 41600 73
