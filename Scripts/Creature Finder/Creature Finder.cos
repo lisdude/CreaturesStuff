@@ -1,6 +1,6 @@
 ***
 * Creature Finder
-* v1.1
+* v1.2
 *
 * Allows you to type simple commands to the hand to find specific creatures by name:
 *   goto <name>		Move the camera to the creature named <name>.
@@ -8,10 +8,13 @@
 *   summon <name>		Pick up the creature named <name>, teleporting it to you.
 *   get <name>		Move the camera to the creature named <name> and pick it up.
 *
+* If <name> ends with an asterisk (*), it will return the first creature with a name beginning
+* with <name>. e.g. "summon ron*" could match to a creature named Ronald.
+*
 * Excessively commented as a learning reminder. This is my first time working with CAOS.
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2021-05-07
+* Last Modified: 2021-05-09
 ***
 
 new: simp 1 2 41600 "blnk" 0 0 0
@@ -37,6 +40,13 @@ scrp 1 2 41600 73
 *       3. Move the camera to it.
 *	  4. Summon it to us.
 		setv va03 0
+* va04: Temp variable
+* va05: Length of va02
+* va06: Enumerated creature's lowercased name.
+* va07: Flag indicating whether or not a match succeeded.
+		setv va07 0
+* va08: A flag indicating whether to allow partial matches or not.
+		setv va04 0
 ******************
 
 * Give up our timeslice so that the speech bubble will run first and actually get created.
@@ -91,12 +101,37 @@ scrp 1 2 41600 73
 
 * Check if we have a creature name to work with.
 		doif va02 ne ""
+* Check if it's a partial match.
+			setv va05 strl va02
+			doif char va02 va05 eq '*'
+* Set partial match flag to true.
+				setv va08 1
+* Change the name to get rid of the asterisk
+				subv va05 1
+				sets va02 subs va02 1 va05
+			endi
+* Since I don't trust 'and' and 'or' in CAOS, we'll store SUCCESS WOO in va07 and do everything the long way.
+			setv va07 0
 * See if any creatures match that name.
 			enum 4 0 0
 * Check our 'break' flag. If we're done, no sense in doing more string comparisons.
 				doif va01 eq 0
-* Check if the name matches the name given in the speech bubble (va02)
-					doif lowa hist name gtos 0 eq va02
+* Store the lowercased Creature's name.
+					sets va06 lowa hist name gtos 0
+* Check if the name (va06) matches the name given in the speech bubble (va02) exactly
+					doif va06 eq va02
+						setv va07 1
+* If we wanted to try partial matching...
+					elif va08 eq 1
+* Make sure the length is correct before trying to chop up the creature name.
+						doif strl va06 ge va05
+* Check if our name (va06) is a substring of the creature's name
+							doif subs va06 1 va05 eq va02
+								setv va07 1
+							endi
+						endi
+					endi
+					doif va07 eq 1
 						setv va01 1
 						doif va03 eq 3
 * Goto: Just change the active creature. Done!
