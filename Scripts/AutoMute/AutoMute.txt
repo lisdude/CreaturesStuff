@@ -1,0 +1,48 @@
+"en-GB"
+
+group AGNT "AutoMute (C3)"
+"Agent Type" 0
+
+"Agent Description" "Automatically mutes sound effects, music, and creature voices when loading a world."
+"Agent Animation File" "automute.c16"
+"Agent Animation Gallery" "automute"
+"Agent Animation String" "0"
+"Agent Bioenergy Value" 0
+"Camera X" 0
+"Camera Y" 9998
+
+"Script Count" 1
+"Script 1" @ "AutoMute.cos"
+
+"Dependency Count" 1
+"Dependency 1" "automute.c16"
+"Dependency Category 1" 2
+
+
+"Remove script" "enum 1 2 41602 kill targ next scrx 1 2 41602 128"
+
+
+group DSAG "AutoMute"
+"Agent Type" 0
+
+"Agent Description" "Automatically mutes sound effects, music, and creature voices when loading a world."
+"Agent Animation File" "automute.c16"
+"Agent Animation Gallery" "automute"
+"Agent Animation String" "0"
+"Agent Sprite First Image" 0
+"Web URL" "github.com/lisdude/CreaturesStuff"
+"Web Label" "GitHub"
+
+
+"Script Count" 1
+"Script 1" @ "AutoMute.cos"
+
+"Dependency Count" 1
+"Dependency 1" "automute.c16"
+"Dependency Category 1" 2
+
+
+"Remove script" "enum 1 2 41602 kill targ next scrx 1 2 41602 128"
+
+
+inline FILE "automute.c16" "automute.c16"

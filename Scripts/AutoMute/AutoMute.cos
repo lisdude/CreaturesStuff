@@ -1,0 +1,27 @@
+***
+* AutoMute
+* v1.0
+*
+* Automatically mute sound effects, music, and creature voices when the world loads.
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2021-05-07
+***
+* Just in case somebody mashes on inject a thousand times, make sure we only have one copy:
+enum 1 2 41602
+	kill targ
+next
+
+new: simp 1 2 41602 "blnk" 0 0 0
+* Hiding shouldn't be necessary since it's not moved anywhere, but... who knows.
+attr 16
+
+scrp 1 2 41602 128
+* Mute sound and music.
+	setv va00 mute 0 3
+* Mute creature voices.
+	setv game "engine_dumb_creatures" 1
+* Update the options interface.
+	rtar 1 2 12
+	mesg writ targ 123
+endm
