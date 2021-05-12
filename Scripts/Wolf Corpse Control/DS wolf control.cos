@@ -1,0 +1,179 @@
+new: comp 1 2 202 "wolf" 2 0 9000
+
+pat: fixd 1 "wolf" 1 0 0 0 "WhiteOnTransparentChars"
+part 1
+frmt 8 8 8 8 3 0 0
+
+imsk 1
+attr 48
+setv ov00 0
+* Corpse removal
+setv ov01 0
+tick 1200
+
+scrp 1 2 202 73
+	inst
+	doif keyd 17 = 1 and keyd 16 = 1
+		doif _p1_ = 'W'
+			doif ov00 = 0
+				setv ov00 1
+				setv va90 wndw
+				divv va90 2
+				setv va91 wndh
+				divv va91 2
+				setv va92 wdth
+				divv va92 2
+				setv va93 hght
+				divv va93 2
+
+				subv va90 va92
+				subv va91 va93
+
+				flto va90 va91
+				mesg writ ownr 1000
+			else
+				setv ov00 0
+				flto -1000 -1000
+				setv va00 wolf 12 1
+			endi
+		elif _p1_ = 'F'
+			doif ov00 = 1
+				setv va00 wolf 15 3
+				mesg writ ownr 1000
+			endi
+		elif _p1_ = 'A'
+			doif ov00 = 1
+				setv va00 wolf 15 8
+				mesg writ ownr 1000
+			endi
+		elif _p1_ = 'O'
+			doif ov00 = 1
+				doif ov01 eq 1
+					setv ov01 0
+				else
+					setv ov01 1
+				endi
+				mesg writ ownr 1000
+			endi
+		endi
+	endi
+endm
+
+scrp 1 2 202 9
+* What a handy spot to remove corpses!
+	doif ov01 eq 1
+		enum 4 0 0
+			doif targ ne null and dead eq 1
+				kill targ
+			endi
+		next
+	endi
+
+	mesg writ ownr 1000
+endm
+
+scrp 1 2 202 1000
+	inst
+	doif ov00 = 0
+		stop
+	endi
+	sets va00 "Wolf Control\n\n"
+* world tick
+	adds va00 "World ticks: "
+	adds va00 vtos wtik
+	adds va00 "\n"
+* time
+	adds va00 "Equivalent time: "
+	setv va01 wtik
+	divv va01 20
+	setv va03 va01
+	modv va03 60
+	divv va01 60
+	setv va02 va01
+	modv va02 60
+	divv va01 60
+* va01 - hours
+* va02 - minutes
+* va03 - seconds
+	adds va00 vtos va01
+	adds va00 " hour"
+	doif va01 <> 1
+		adds va00 "s"
+	endi
+	adds va00 " "
+	adds va00 vtos va02
+	adds va00 " minute"
+	doif va02 <> 1
+		adds va00 "s"
+	endi
+	adds va00 "\n"
+
+* ticks per second
+	adds va00 "Frame rate: "
+	setv va01 itof 1
+	doif race lt 1
+		adds va00 "Way too fast\n\n"
+	else
+		divv va01 race
+		mulv va01 1000
+		adds va00 vtos va01
+		adds va00 "\n\n"
+	endi
+
+* display
+	setv va01 wolf 15 0
+	setv va02 va01
+	andv va02 1
+	doif va02 = 1
+		adds va00 "Rendering display"
+	else
+		adds va00 "Display update every "
+		setv va10 tick
+		divv va10 20
+		adds va00 vtos va10
+		adds va00 " secs equivalent"
+	endi
+	adds va00 "\n"
+* fast tick
+	setv va02 va01
+	andv va02 2
+	doif va02 = 2
+		adds va00 "Fast ticks"
+	else
+		adds va00 "Normal ticks"
+	endi
+* autokill 
+	adds va00 "\n"
+	setv va02 va01
+	andv va02 8
+	doif va02 = 8
+		adds va00 "Autokill enabled"
+	else
+		adds va00 "Autokill disabled"
+	endi
+
+* corpse cleaner
+	adds va00 ". Corpse removal "
+	doif ov01 = 1
+		adds va00 "enabled."
+	else
+		adds va00 "disabled."
+	endi
+
+* help
+	adds va00 "\n\nShift+Ctrl+W to toggle this window\n"
+	adds va00 "Shift+Ctrl+F to toggle fast speed\n"
+	adds va00 "Shift+Ctrl+A to toggle autokill\n"
+	adds va00 "Shift+Ctrl+O to toggle corpse removal\n"
+	part 1
+	ptxt va00
+
+* refresh display
+	setv va00 wolf 11 4
+endm
+
+rscr
+enum 1 2 202
+	kill targ
+next
+setv va00 wolf 12 1
