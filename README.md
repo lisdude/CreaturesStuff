@@ -6,6 +6,7 @@ As I've been getting back into Creatures, I've noticed a couple of issues that m
 2. Download `FixRegistry.cmd` from here. Right-click on it and choose 'Run as Administrator'. This is the stock installer registry commands with a couple of tweaks. First, it removes the space to fix the infamous "Creatures " (Creatures with a space after it) path issue. It also removes an extraneous slash from one of the paths and adds a bit at the end to unlock the DPI settings within Windows.
 3. Install [Creatures Remastered Patch](http://www.webpetz.com/creatures/remasters.php), but say no to fixing My Documents. I don't know what that's supposed to do but I never noticed it have any effect. And saying no doesn't harm anything.
 4. Move the [Recommended Add-ons](https://creatures.wiki/Creatures_3_%26_Docking_Station_Community_Recommended_Fixes_and_Addons) and/or your favorite add-ons into the appropriate C3 and DS folders of [Creatures Add-on Installer](https://github.com/lisdude/CreaturesAddonInstaller) and run said installer.
+5. Launch the game from the 'Docking Station' shortcut, not the 'Creatures Exodus' shortcut. If you plan to play Creatures 3 without Docking Station, read on...
 
 ### Creatures 3 (Without Docking Station)
 At this point, Docking Station should work just fine. Plain Creatures 3, however, has a couple of issues we'll need to correct.
