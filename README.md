@@ -23,15 +23,15 @@ At this point, Docking Station should work just fine. Plain Creatures 3, however
 This is the section for you if you receive error messages when launching the games, things are being put in the wrong place, you want to delete everything for a new Steam install, or you've tried a lot of different fixes for a lot of different problems and everything has gone weird. I find the best approach to fixing these problems is to start over from scratch, ensuring that everything you can possibly delete has been deleted.
 
 1. Save all of your exported creatures (if applicable). We're going to delete everything.
-2a. *Creatures Exodus*: Start - Add or Remove Programs. Select 'Creatures Exodus' and click 'Uninstall'. Since we already made our own backups, and we don't necessarily know where your files are living, say no when it asks if you want to keep your saved games. Repeat for 'GOG.com C3 Docking Station' if it's in the list.
-2b. *Creatures on Steam*: Find 'Creatures Docking Station' in your library. Right-click on it, select 'Manage', and choose 'Uninstall'. 
-3. Check for lingering files from previous installations. If you see a folder called `Creatures` or `Creatures Exodus` or `Docking Station`, delete it. Here are some places to check:
+2. *Creatures Exodus*: Start - Add or Remove Programs. Select 'Creatures Exodus' and click 'Uninstall'. Since we already made our own backups, and we don't necessarily know where your files are living, say no when it asks if you want to keep your saved games. Repeat for 'GOG.com C3 Docking Station' if it's in the list.
+3. *Creatures on Steam*: Find 'Creatures Docking Station' in your library. Right-click on it, select 'Manage', and choose 'Uninstall'. 
+4. Check for lingering files from previous installations. If you see a folder called `Creatures` or `Creatures Exodus` or `Docking Station`, delete it. Here are some places to check:
     - C:\Users\<YOUR USERNAME>\Documents
     - C:\GOG Games\
     - C:\Program Files (x86)
     - C:\Program Files (x86)\Steam\steamapps\common\Creatures Docking Station
-4. Download `UNINSTALL.cmd` from here. Right-click on it and choose 'Run as Administrator'. This will remove any lingering registry entries.
-5. Follow the installation steps at the top of the page to do a clean install.
+5. Download `UNINSTALL.cmd` from here. Right-click on it and choose 'Run as Administrator'. This will remove any lingering registry entries.
+6. Follow the installation steps at the top of the page to do a clean install.
 
 ## Other Stuff
 - `UNINSTALL.cmd` is just an easy way to clean up all of the registry entries that the Creatures Exodus and Steam installers make. It was handy for testing. Should be run as an administrator. **NOTE**: This will delete registry keys for GOG installs, Steam installs, and some Creatures tools. It should only be used if you intend to reinstall.
