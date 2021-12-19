@@ -19,7 +19,7 @@ At this point, Docking Station should work just fine. Plain Creatures 3, however
 6. Hit ALT-Enter to exit fullscreen mode. It will complain about 16-bit color and everything will get weird. Close the window.
 7. Now launch 'Creatures Exodus' again (remember, always use the shortcut) and everything should look normal! Resize the window however is comfortable and have fun.
 
-## Recommendations For Broken Installs (Wipe and Start Over) (GOG Release)
+## Recommendations For Broken Installs (Wipe and Start Over)
 This is the section for you if you receive error messages when launching the games, things are being put in the wrong place, you want to delete everything for a new Steam install, or you've tried a lot of different fixes for a lot of different problems and everything has gone weird. I find the best approach to fixing these problems is to start over from scratch, ensuring that everything you can possibly delete has been deleted.
 
 1. Save all of your exported creatures (if applicable). We're going to delete everything.

@@ -20,11 +20,18 @@ Please, feel free to share and archive to your heart's content! All I ask is tha
 
 ===============================================================================================
 
+Changelog
+
+v1.1            Decompose bodies rather than immediately disposing of them.
+v1.0            Initial release.
+
+===============================================================================================
+
 Additional Notes:
 This script includes Amaikokonut's 'Wolf Control Fix'. Please see the accompanying file 'README_Amaikokonut.txt' for the original patch's readme.
 
 ===============================================================================================
 
 Author:         lisdude@lisdude.com
-Last Modified:  2021-05-11
+Last Modified:  2021-12-19
 Source Code:    https://github.com/lisdude/CreaturesStuff
