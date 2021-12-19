@@ -1,4 +1,4 @@
-Wolf Corpse Control v1.0
+Wolf Corpse Control v1.1
 ------------------------
 Adds a keyboard shortcut (Shift+Ctrl+O) to the wolf control dialog (Shift+Ctrl+W) to control automatic corpse removal.
 
