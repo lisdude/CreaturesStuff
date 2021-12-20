@@ -1,4 +1,4 @@
-Wolf Corpse Control v1.1
+Wolf Corpse Control v1.2
 ------------------------
 Adds a keyboard shortcut (Shift+Ctrl+O) to the wolf control dialog (Shift+Ctrl+W) to control automatic corpse removal.
 
@@ -22,6 +22,7 @@ Please, feel free to share and archive to your heart's content! All I ask is tha
 
 Changelog
 
+v1.2            Fix a bug that resulted in wolf control getting autokilled.
 v1.1            Decompose bodies rather than immediately disposing of them.
 v1.0            Initial release.
 
@@ -33,5 +34,5 @@ This script includes Amaikokonut's 'Wolf Control Fix'. Please see the accompanyi
 ===============================================================================================
 
 Author:         lisdude@lisdude.com
-Last Modified:  2021-12-19
+Last Modified:  2021-12-20
 Source Code:    https://github.com/lisdude/CreaturesStuff

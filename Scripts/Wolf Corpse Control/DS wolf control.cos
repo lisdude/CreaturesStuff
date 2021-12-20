@@ -63,12 +63,14 @@ scrp 1 2 202 9
 * What a handy spot to remove corpses!
 	doif ov01 eq 1
 		enum 4 0 0
-			doif targ ne null and dead eq 1 and ov81 eq 0
-				* Indicate that we want the body to decompose.
-				setv ov81 1
-*				sets va30 "Decomposing "
-*				adds va30 hist name gtos 0
-*				dbg: outs va30
+			doif targ ne null
+				doif dead eq 1 and ov81 eq 0
+* Indicate that we want the body to decompose.
+					setv ov81 1
+*					sets va30 "Decomposing "
+*					adds va30 hist name gtos 0
+*					dbg: outs va30
+				endi
 			endi
 		next
 	endi
