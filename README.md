@@ -35,3 +35,4 @@ This is the section for you if you receive error messages when launching the gam
 
 ## Other Stuff
 - `UNINSTALL.cmd` is just an easy way to clean up all of the registry entries that the Creatures Exodus and Steam installers make. It was handy for testing. Should be run as an administrator. **NOTE**: This will delete registry keys for GOG installs, Steam installs, and some Creatures tools. It should only be used if you intend to reinstall.
+- `RebuildCreatures2Registry.cmd` deletes existing Creatures 2 registry entries and adds a minimum set to run the game. This has mildly handy configuration variables for the Blueberry4$ cheat by default and setting MaxNorns. You probably won't ever need to use this file unless you're experimenting with, and horribly breaking, Creatures 2.
