@@ -1,0 +1,62 @@
+***
+* Signpost Activator
+* v1.0
+*
+* Activate all signposts without having to actually move to each room.
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2022-08-10
+***
+
+*** Variables
+* va01 - The species of the signpost.
+* va02 - The signpost's corresponding metaroom.
+***
+
+* Iterate through all signposts.
+enum 1 3 0
+* Make sure a corresponding icon doesn't already exist in the favorites bar.
+	doif ov00 eq 0
+* If it's not a Docking Station signpost and we're not docked, do nothing.
+* (I can't think of a better way to know if it's DS or not, so ridiculous bruteforce it is...)
+		setv va01 spcs
+		doif va01 ne 10 and va01 ne 9 and va01 ne 8 and va01 ne 11 and eame "engine_no_auxiliary_bootstrap_1" ne 0
+			ELSE
+* Mark that the signpost now has an icon.
+			setv ov00 1
+* Get the metaroom the signpost is in.
+			setv va02 gmap posx posy
+* Make the favorites icon.
+			new: simp 1 4 va01 gall 2 1 8505
+			tran 0 0
+			attr 308
+* Set the icon's position in the favorites stack.
+			setv ov50 game "ds_favourites"
+			addv game "ds_favourites" 1
+* Save the metaroom in the icon.
+			setv ov01 va02
+		endi
+	endi
+next
+
+* Meso is going to appear second, which is weird, so swap it with the hub.
+enum 1 4 10
+	setv ov50 0
+next
+enum 1 4 11
+	setv ov50 1
+next
+**
+
+* If docked, swap Norn Terrarium and Learning Room. Because their defaults are, in fact, weird.
+doif eame "engine_no_auxiliary_bootstrap_1" ne 1
+	enum 1 4 7
+		setv va01 ov50
+		setv ov50 game "ds_favourites"
+		subv ov50 1
+	next
+	enum 1 4 1
+		setv ov50 va01
+	next
+endi
+**
