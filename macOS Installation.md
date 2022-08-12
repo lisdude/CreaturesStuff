@@ -33,7 +33,7 @@ If you intend to run Docking Station alongside Creatures 3, you'll also need a n
 8. Click 'Install Software' and 'Copy a Folder Inside'. If you followed the preparation steps above, you want: `~/Downloads/CreaturesStuff/SDLEngineExtractor/Creatures Docking Station`. If it prompts you to choose an executable, click 'OK'.
 9. Click 'Tools', 'Command Line (cmd)'.
 10. Type: `"C:\Program Files\Creatures Docking Station\FixRegistryWINE.cmd"` and hit enter. (Make sure you leave the quotes.) The command prompt will close when it's finished.
-11. Back in Wineskin, go back to the 'Configuration' tab. Change 'Windows EXE' to: `C:\Program Files\Creatures Docking Station\Docking Station\engine.exe` if it's not already there.
+11. Back in Wineskin, go back to the 'Configuration' tab. Change 'Windows EXE' to: `"C:\Program Files\Creatures Docking Station\Docking Station\engine.exe" --autokill` if it's not already there.
 12. If you have a Creatures 3 install and want to run a docked world, go back into `~/Applications/Wineskin/Creatures.app/Wineskin.app`, Advanced, Install Software, Copy a Folder Inside, and choose your Creatures 3 directory. Then go to Tools - Command Line (cmd). Type: `move "C:\Program Files\Creatures 3" "C:\Program Files\Creatures Docking Station"`. Now type `exit`
 
 Now, assuming the stars aligned and everything worked, you should be able to start Docking Station just by launching `Creatures.app`.
