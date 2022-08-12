@@ -56,12 +56,7 @@ Now for each tool...
 1. Launch Wineskin config from `~/Applications/Wineskin/Creatures.app/Wineskin.app`
 2. Click Advanced - Tools - Install Software
 3. Choose 'Copy a Folder Inside' and pick your directory.
-4. Now click 'Custom EXE Creator'. Give it a name and a path to the Windows EXE. (It should be in `C:\Program Files\xxx`. Save.
+4. Now click 'Custom EXE Creator'. Give it a name and a path to the Windows EXE. (It should be in `C:\Program Files\xxx`). Save.
 5. The .app for your tool will be in `~/Applications/Wineskin/Creatures.app/<xxx>.app`
-
-NOTE: If you use Homebrew for tools such as 'chmod', you'll need to perform an extra step in the command prompt. For our example, we'll be using the CAOS Debugger and nano as an editor.
-1. `nano -w ~/Applications/Wineskin/Creatures.app/CAOS\ Debugger.app/Contents/MacOS/CustomEXE`
-2. Above where it says `# Set all variables`, paste: `export PATH="/usr/local/bin:/usr/bin:/bin"`
-3. Hit `CTRL-X` and `y` to save. 
 
 I haven't really tested any tools except for the CAOS debugger, so results may vary.
