@@ -251,4 +251,6 @@ fi
 
 echo ""
 echo "NOTE: If you get a 'no such file or directory' error when you know the file exists, you may need these:"
+echo "      sudo dpkg --add-architecture i386"
+echo "      sudo apt update"
 echo "      sudo apt install libc6:i386 libstdc++6:i386 zlib1g:i386 libxi6:i386"
