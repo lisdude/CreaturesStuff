@@ -99,6 +99,7 @@ echo "Icon \"dstation.bmp\"" >> ./user.cfg
 
 # Add handy executable for Docking Station
 cat >> ds << END
+#!/bin/bash
 if [ -f DS_machine.cfg ]; then
     mv machine.cfg C3_machine.cfg
     mv DS_machine.cfg machine.cfg
@@ -143,7 +144,7 @@ if [ -d "Creatures 3" ]; then
 END
 
 # To allow game-swapping, create alternative configurations and launcher.
-[[ -f "${C3_MAIN}/Users" ]] && mkdir "${C3_MAIN}/Users"
+! [[ -f "${C3_MAIN}/Users" ]] && mkdir "${C3_MAIN}/Users"
 cat >>C3_machine.cfg <<END
 "Backgrounds Directory" "$C3_MAIN/Backgrounds/"
 "Body Data Directory" "$C3_MAIN/Body Data/"
@@ -171,6 +172,7 @@ FullScreen 0
 END
 
 cat >> c3 << END
+#!/bin/bash
 if [ -f C3_machine.cfg ]; then
     mv machine.cfg DS_machine.cfg
     mv C3_machine.cfg machine.cfg
