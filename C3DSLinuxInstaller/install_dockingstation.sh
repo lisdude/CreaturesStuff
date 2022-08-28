@@ -57,7 +57,7 @@ fi
 
 # Check if already 'installed'.
 if [ -d "${INSTALL_DIR}" ]; then
-    echo "It looks like you already have an installation. If you want to start over, delete '${INSTALL_DIR}' and try again. If you want to play, launch 'dockingstation' from '${INSTALL_DIR}'."
+    echo "It looks like you already have an installation. If you want to start over, delete '${INSTALL_DIR}' and try again. If you want to play, launch 'ds' from '${INSTALL_DIR}'."
     exit
 fi
 
