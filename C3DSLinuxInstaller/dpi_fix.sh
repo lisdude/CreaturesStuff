@@ -7,7 +7,7 @@
 INSTALL_DIR="./DockingStation"
 
 WEBSITE="https://github.com/Xpra-org/xpra/wiki/Download"
-INSTALL_DIR=$(realpath ${INSTALL_DIR})
+INSTALL_DIR=$(realpath "${INSTALL_DIR}")
 
 if ! [[ -d "${INSTALL_DIR}" ]]; then
     echo "Couldn't find a Docking Station installation. If you changed the default location, you'll need to edit this script and change INSTALL_DIR at the top."

@@ -29,7 +29,7 @@ DS="dockingstation_195_64.tar.bz2"
 GLIB="libglib1.2ldbl_1.2.10-19build1_i386.deb"
 GTK="libgtk1.2_1.2.10-18_i386.deb"
 SDL="SDL-1.2.9-1.i386.rpm"
-INSTALL_DIR=$(realpath ${INSTALL_DIR})
+INSTALL_DIR=$(realpath "${INSTALL_DIR}")
 THIS_DIR=$(pwd)
 EXTRACT_DIR="${INSTALL_DIR}/dockingstation_195_64"
 
@@ -144,7 +144,7 @@ if [ -d "Creatures 3" ]; then
 END
 
 # To allow game-swapping, create alternative configurations and launcher.
-! [[ -f "${C3_MAIN}/Users" ]] && mkdir "${C3_MAIN}/Users"
+! [[ -d "${C3_MAIN}/Users" ]] && mkdir "${C3_MAIN}/Users"
 cat >>C3_machine.cfg <<END
 "Backgrounds Directory" "$C3_MAIN/Backgrounds/"
 "Body Data Directory" "$C3_MAIN/Body Data/"
