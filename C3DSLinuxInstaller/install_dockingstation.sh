@@ -106,7 +106,7 @@ if [ -f DS_machine.cfg ]; then
     mv user.cfg C3_user.cfg
     mv DS_user.cfg user.cfg
 fi
-export LD_LIBRARY_PATH="${INSTALL_DIR}:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="./:$LD_LIBRARY_PATH"
 ./lc2e --autokill
 END
 chmod u+x ./ds
@@ -179,7 +179,7 @@ if [ -f C3_machine.cfg ]; then
     mv user.cfg DS_user.cfg
     mv C3_user.cfg user.cfg
 fi
-export LD_LIBRARY_PATH="${INSTALL_DIR}:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="./:$LD_LIBRARY_PATH"
 ./lc2e --autokill
 END
 chmod u+x ./c3
