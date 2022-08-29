@@ -30,6 +30,10 @@ GLIB="libglib1.2ldbl_1.2.10-19build1_i386.deb"
 GTK="libgtk1.2_1.2.10-18_i386.deb"
 SDL="SDL-1.2.9-1.i386.rpm"
 INSTALL_DIR=$(realpath "${INSTALL_DIR}")
+if [[ $? != 0 ]]; then
+    echo "Couldn't determine the install path. Aborting."
+    exit
+fi
 THIS_DIR=$(pwd)
 EXTRACT_DIR="${INSTALL_DIR}/dockingstation_195_64"
 
@@ -62,7 +66,7 @@ if [ -d "${INSTALL_DIR}" ]; then
 fi
 
 # Create the install directory and copy a temporary copy of our Docking Station archive.
-mkdir -p "${INSTALL_DIR}"
+mkdir -p "${INSTALL_DIR}" 2>/dev/null || { echo "Couldn't create installation directory. Aborting."; exit; }
 cp "${DS}" "${INSTALL_DIR}"
 cd "${INSTALL_DIR}"
 
