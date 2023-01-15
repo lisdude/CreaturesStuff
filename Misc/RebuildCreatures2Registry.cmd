@@ -112,4 +112,18 @@ if "%version:~0,3%"=="5.1" (
 SET regpath="HKEY_LOCAL_MACHINE\SOFTWARE\%company%\Creatures 2\1.0"
 REG ADD %regpath% /v "Geneticz Directory" /t REG_SZ /d "%mydocpath%\Creatures\Creatures 2\Genetics\\" /f
 
+:: Register everything
+"%installdir%\BreedersKit.exe"
+"%installdir%\ChroniclesKit.exe"
+"%installdir%\EcologyKit.exe"
+"%installdir%\GraveyardKit.exe"
+"%installdir%\Hatchery.exe"
+"%installdir%\HealthKit.exe"
+"%installdir%\InjectorKit.exe"
+"%installdir%\NeuroscienceKit.exe"
+"%installdir%\ObservationKit.exe"
+"%installdir%\OwnerKit.exe"
+"%installdir%\ScienceKit.exe"
+"%installdir%\creatures2.exe"
+
 endlocal

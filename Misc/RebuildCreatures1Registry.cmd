@@ -71,4 +71,16 @@ IF %compatibility% == 1 (
     )
 )
 
+:: Register everything.
+"%installdir%\Breeder's Kit.exe"
+"%installdir%\Funeral Kit.exe"
+"%installdir%\Hatchery.exe"
+"%installdir%\Health Kit.exe"
+"%installdir%\Injector.exe"
+"%installdir%\observation.exe"
+"%installdir%\Owner's Kit.exe"
+"%installdir%\Science Kit.exe"
+"%installdir%\Score Kit.exe"
+"%installdir%\Creatures.exe"
+
 endlocal
