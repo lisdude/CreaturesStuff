@@ -1,7 +1,7 @@
 ## Other Stuff
-- `RebuildCreatures2Registry.cmd` deletes existing Creatures 2 registry entries and adds a minimum set to run the game. This has mildly handy configuration variables for the Blueberry4$ cheat by default and setting MaxNorns. You probably won't ever need to use this file unless you're experimenting with, and horribly breaking, Creatures 2.
-- `RebuildCreatures1Registry.cmd` is the Creatures 1 version of the above. Deletes existing keys, adds new ones, has an option for the 'doctor' cheat.
-- `FixRegistryWINE.cmd` is the same thing as the regular registry fix except it hardcodes the path and removes some incompatible flags. Mainly intended for the macOS guide.
+- `RebuildCreatures1Registry.cmd` deletes existing Creatures 1 registry entries and adds a a minimum set to run the game. It also incorporates the tools fix, so no need to run FixC1Tools.cmd or use the 'Remaster Patch'. Also has an option for the 'doctor' cheat.
+- `RebuildCreatures2Registry.cmd` is the same as above. It includes the tool fix, the Blueberry4$ cheat, and setting MaxNorns.
+- `RebuildCreatures3Registry.cmd` is the Creatures 3 / Docking Station version of the above.
 - `machine.cfg` is a pre-configured machine.cfg for a dual install of Creatures 3 and Docking Station in WINE. Mainly intended for the macOS guide.
 - `minicaos` is the official CAOS command line script modified to have a history.
 - `FixC1Tools.cmd` enables older tools to find Creatures 1. This is essentially the 'Remaster Patch' without the need for an executable.
