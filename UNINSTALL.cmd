@@ -1,5 +1,7 @@
 @echo off
 
+:: This script will, rather aggressively, wipe out all of the registry entries from previously installed versions of Creatures and Creatures tools.
+
 :: Gameware Development
 REG DELETE "HKEY_CURRENT_USER\Software\Gameware Development" /F
 REG DELETE "HKEY_LOCAL_MACHINE\Software\Gameware Development" /F
@@ -10,7 +12,6 @@ REG DELETE "HKEY_CLASSES_ROOT\VirtualStore\MACHINE\SOFTWARE\WOW6432Node\Gameware
 REG DELETE "HKEY_CURRENT_USER\Software\Cyberlife Technology" /F
 REG DELETE "HKEY_LOCAL_MACHINE\Software\Cyberlife Technology" /F
 REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\CyberLife Technology" /F
-REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths\Creatures Exodus" /F
 REG DELETE "HKEY_CLASSES_ROOT\VirtualStore\MACHINE\SOFTWARE\WOW6432Node\CyberLife Technology" /F
 REG DELETE "HKEY_CURRENT_USER\Software\Classes\VirtualStore\MACHINE\SOFTWARE\WOW6432Node\CyberLife Technology" /F
 
@@ -25,6 +26,8 @@ REG DELETE "HKEY_LOCAL_MACHINE\Software\Millennium Interactive" /F
 
 :: Misc
 REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\Creatures Exodus" /F
+REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\App Paths\Creatures Exodus" /F
+
 Rem REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\GOG.com" /F
 
 exit
