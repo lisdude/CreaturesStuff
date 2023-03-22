@@ -6,3 +6,4 @@
 - `minicaos` is the official CAOS command line script modified to have a history.
 - `FixC1Tools.cmd` enables older tools to find Creatures 1. This is essentially the 'Remaster Patch' without the need for an executable.
 - `FixC2Tools.cmd` is the same as above, only for Creatures 2.
+- `SetC2Compatibility.cmd` will change the compatibility settings for all Creatures 2 EXE files to use 16-bit color and system DPI scaling.
