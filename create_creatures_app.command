@@ -209,7 +209,7 @@ fi
 # Now copy the Steam install into the wrapper.
 echo "Copying installation from ${steamdir} to ${apppath}/drive_c/Program Files..."
 cp -r "${steamdir}" "${apppath}/drive_c/Program Files/Creatures Docking Station"
-ln -s "${apppath}/drive_c/Program Files/Creatures Docking Station/Docking Station" "${apppath}/Docking Station"
+ln -s "./drive_c/Program Files/Creatures Docking Station/Docking Station" "${apppath}/Docking Station"
 
 # Replace the original engine with the SDL engine for both Docking Station and Creatures 3.
 cp "${creaturesdir}/Docking Station/"{engine.exe,SDL.dll,SDL_mixer.dll,SDLstretch.dll} "${apppath}/drive_c/Program Files/Creatures Docking Station/Docking Station"
