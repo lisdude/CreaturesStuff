@@ -46,7 +46,7 @@ REG ADD %regpath% /v "Tool5" /t REG_SZ /d "Sex.OLE|Breeder's Kit|Pregnancy monit
 REG ADD %regpath% /v "Tool6" /t REG_SZ /d "Overview.OLE|Observation Kit|Monitor all creatures|6" /f
 REG ADD %regpath% /v "Tool7" /t REG_SZ /d "ObjectInjector.OLE|Object Injector|Add new objects|7" /f
 REG ADD %regpath% /v "Tool8" /t REG_SZ /d "Score.OLE|Performance Kit|Scoring data|8" /f
-REG ADD %regpath% /v "Tool9" /t REG_SZ /d "Funeral.OLE|Creature Graveyard|{ay your respects|9" /f
+REG ADD %regpath% /v "Tool9" /t REG_SZ /d "Funeral.OLE|Creature Graveyard|Pay your respects|9" /f
 REG ADD %regpath% /v "Programs" /t REG_SZ /d "" /f
 REG ADD %regpath% /v "Genetics Directory" /t REG_SZ /d "" /f
 REG ADD %regpath% /v "Main Directory" /t REG_SZ /d "" /f
