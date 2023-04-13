@@ -7,3 +7,4 @@
 - `FixC1Tools.cmd` enables older tools to find Creatures 1. This is essentially the 'Remaster Patch' without the need for an executable.
 - `FixC2Tools.cmd` is the same as above, only for Creatures 2.
 - `SetC2Compatibility.cmd` will change the compatibility settings for all Creatures 2 EXE files to use 16-bit color and system DPI scaling.
+- `C2Launcher.bat` is a command-line launcher for Creatures 2 worlds. It can be placed anywhere and, when run, presents a menu of detected worlds. Pick one and it launches the game with the world, bypassing passwords entirely. (Useful for when the official launcher breaks and fake passwords your world.)
