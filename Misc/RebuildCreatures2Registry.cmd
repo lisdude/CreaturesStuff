@@ -2,13 +2,13 @@
 setlocal ENABLEDELAYEDEXPANSION
 
 :: This batch file will delete existing Creatures 2 / World Switcher registry keys and replace them with a minimum set necessary to launch the game.
-:: NOTE: This was created and used only in a Windows XP environment. You may find it necessary to make changes for Windows 10 or above, specifically to the installdir and userdir.
-:: MOAR NOTEZ: The location of 'MaxNorns' and 'MaxKits' differs between versions. In version 38 and below, it looks in HKEY_LOCAL_MACHINE. In 39, it looks in HKEY_CURRENT_USER. For simplicity, this file will populate both. Just beware if you're looking to change it in the future.
+:: NOTE: The location of 'MaxNorns' and 'MaxKits' differs between versions. In version 38 and below, it looks in HKEY_LOCAL_MACHINE. In 39, it looks in HKEY_CURRENT_USER. For simplicity, this file will populate both. Just beware if you're looking to change it in the future.
 
 :: ----- CONFIGURATION -----
-:: This is where your Creatures 2 is installed. NOTE: GOG installs to "C:\GOG Games\Creatures 2" by default, not Program Files.
-SET installdir=C:\Program Files\Creatures 2
-:: Cheat mode: Disabled by default. If you want to switch to cheat mode, change this to 'Blueberry4$'
+:: This is where your Creatures 2 is installed. NOTE: GOG installs to "C:\GOG Games\Creatures 2" by default and Deluxe to C:\Program Files\Creatures 2
+SET installdir=C:\Program Files (x86)\Steam\steamapps\common\Creatures The Albian Years\Creatures 2
+:: Cheat mode: Disabled by default. If you want to switch to safe cheat mode, change this to: GreenTea
+::             If you want to use the developer not-so-safe cheat mode, change this to: Blueberry4$
 set privileges=User
 :: Maximum number of Norns in the world. A vanilla install sets maxnorns to 16.
 set maxnorns=30
@@ -18,7 +18,19 @@ set maxkits=30
 set company=Gameware Development
 :: Tool fix: If enabled, this will add old registry entries for compatibility with older tools.
 SET compatibility=1
+:: Community Build 13: Set this to true if you want all of your data files to stay in the Creatures directory instead of Documents.
+:: WARNING: This functionality is... finicky and not recommended. If you want a non-split install, it's recommended you install
+::          Creatures 2 Deluxe and patch it with the Creatures Community Unified Patcher.
+SET nosplit=0
 :: -------------------------
+
+:: Check if the system is 64-bit and adjust HKLM path accordingly.
+set "is64bit="
+if /i "%PROCESSOR_ARCHITECTURE%"=="AMD64" (
+    set hklm=HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\
+) else (
+    set hklm=HKEY_LOCAL_MACHINE\SOFTWARE\
+)
 
 :: Delete existing registry keys:
 REG DELETE "HKEY_CURRENT_USER\Software\Gameware Development\Creatures 2" /F
@@ -29,9 +41,14 @@ REG DELETE "HKEY_CURRENT_USER\Software\Cyberlife Technology\Creatures 2" /F
 REG DELETE "HKEY_LOCAL_MACHINE\Software\Cyberlife Technology\Creatures 2" /F
 REG DELETE "HKEY_CURRENT_USER\Software\Cyberlife Technology\World Switcher" /F
 REG DELETE "HKEY_LOCAL_MACHINE\Software\Cyberlife Technology\World Switcher" /F
+REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Gameware Development\Creatures 2" /F
+REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Cyberlife Technology\Creatures 2" /F
+
+:: TODO: Delete Windows compatibility entries.
+
 
 :: Configure default paths. See 'installdir' in configuration.
-SET regpath="HKEY_LOCAL_MACHINE\SOFTWARE\%company%\Creatures 2\1.0"
+SET regpath="%hklm%%company%\Creatures 2\1.0"
 REG ADD %regpath% /v "Objects Directory" /t REG_SZ /d "%installdir%\Objects\\" /f
 REG ADD %regpath% /v "Genetics Directory" /t REG_SZ /d "%installdir%\Genetics\\" /f
 REG ADD %regpath% /v "Main Directory" /t REG_SZ /d "%installdir%\\" /f
@@ -75,10 +92,14 @@ REG ADD %regpath% /v "Body Data Directory" /t REG_SZ /d "" /f
 REG ADD %regpath% /v "MaxNorns" /t REG_DWORD /d "%maxnorns%" /f
 REG ADD %regpath% /v "MaxKits" /t REG_DWORD /d "%maxkits%" /f
 
+IF %nosplit% == 1 (
+	REG ADD %regpath% /v "NoSplit" /t REG_DWORD /d "1" /f
+)
+
 :: Compatibility entries (these mimic the other HKLM paths)
 IF %compatibility% == 1 (
     IF NOT "%company%" == "Cyberlife Technology" (
-        SET compatregpath="HKEY_LOCAL_MACHINE\SOFTWARE\Cyberlife Technology\Creatures 2\1.0"
+        SET compatregpath="%hklm%Cyberlife Technology\Creatures 2\1.0"
         REG ADD !compatregpath! /v "Objects Directory" /t REG_SZ /d "%installdir%\Objects\\" /f
         REG ADD !compatregpath! /v "Genetics Directory" /t REG_SZ /d "%installdir%\Genetics\\" /f
         REG ADD !compatregpath! /v "Main Directory" /t REG_SZ /d "%installdir%\\" /f
@@ -93,24 +114,20 @@ IF %compatibility% == 1 (
     )
 )
 
-:: A workaround to get the Science Kit working (only tested in Windows XP):
-:: Seems a path was missed in the NT update and the Science Kit still looks for the genetics directory in HKLM.
-:: However, since the split install, it should be looking in HKCU.
-:: Our solution? Hex edit ScienceKit.exe to change 'Genetics Directory' to 'Geneticz Directory'
-:: Now add the 'Geneticz Directory' key to point to the most likely Documents directory and we're laughin'.
-
-:: First we have to find the Documents directory depending on the version of Windows in use. (This theoretically works.)
-for /f "tokens=5" %%i in ('ver') do set version=%%i
-if "%version:~0,3%"=="5.1" (
-    set "mydocpath=%USERPROFILE%\My Documents"
-) else (
-    set "reg_key=HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders"
-    for /F "tokens=2*" %%A in ('reg query "%reg_key%" /v "Personal"') do set "mydocpath=%%B"
-)
-
-:: Now we need to create a new key 'Geneticz Directory'. This should match what the binary has been hexedited to:
-SET regpath="HKEY_LOCAL_MACHINE\SOFTWARE\%company%\Creatures 2\1.0"
-REG ADD %regpath% /v "Geneticz Directory" /t REG_SZ /d "%mydocpath%\Creatures\Creatures 2\Genetics\\" /f
+:: Windows Compatibility Settings (force 16-bit color, add DPI unawareness)
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\creatures2.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\launcher.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\BreedersKit.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\ChroniclesKit.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\EcologyKit.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\GraveyardKit.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\Hatchery.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\HealthKit.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\InjectorKit.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\NeuroscienceKit.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\ObservationKit.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\OwnerKit.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%INSTALLDIR%\ScienceKit.exe" /t REG_SZ /d "~ 16BITCOLOR GDIDPISCALING DPIUNAWARE" /f
 
 :: Register everything
 "%installdir%\BreedersKit.exe"
