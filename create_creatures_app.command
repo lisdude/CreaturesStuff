@@ -217,6 +217,7 @@ cp "${creaturesdir}/Docking Station/"{engine.exe,SDL.dll,SDL_mixer.dll,SDLstretc
 
 # No CD-ROM needed.
 touch "${apppath}/drive_c/windows/system32/msnope32.dll"
+touch "${apppath}/drive_c/windows/syswow64/msnope32.dll"
 
 # Introduce Docking Station to Creatures 3...
 cat >>"${apppath}/drive_c/Program Files/Creatures Docking Station/Docking Station/machine.cfg" <<END
