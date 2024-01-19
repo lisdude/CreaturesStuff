@@ -96,6 +96,10 @@ IF %nosplit% == 1 (
 	REG ADD %regpath% /v "NoSplit" /t REG_DWORD /d "1" /f
 )
 
+:: Set the current world to World.sfc to avoid errors with older launchers.
+SET regpath="HKEY_CURRENT_USER\SOFTWARE\%company%\Creatures 2\Current World"
+REG ADD %regpath% /v "Name" /t REG_SZ /d "World.sfc" /f
+
 :: Compatibility entries (these mimic the other HKLM paths)
 IF %compatibility% == 1 (
     IF NOT "%company%" == "Cyberlife Technology" (
