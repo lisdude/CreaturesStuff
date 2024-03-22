@@ -1,0 +1,225 @@
+***
+* Ecology Monitor
+* v1.0
+*
+* Monitor the ecology and, if necessary, reinject to restore populations to default.
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2022-08-25
+***
+new: simp 1 1 41606 "blnk" 0 0 0
+attr 16
+
+* Check every ten minutes.
+tick 12000
+
+scrp 1 1 41606 9
+
+***** NORN TERRARIUM *****
+* Butterflies
+doif totl 2 13 2 le 1
+ject "Butterfly.cos" 7
+dbg: outs "Reinjecting butterflies..."
+endi
+
+* Dragonflies
+doif totl 2 15 8 le 1
+ject "dragonfly.cos" 7
+dbg: outs "Reinjecting dragonflies..."
+endi
+
+* Grasshoppers
+doif totl 2 13 6 le 1
+ject "grasshopper.cos" 7
+dbg: outs "Reinjecting grasshoppers..."
+endi
+
+* Grazer
+doif totl 2 15 2 le 1
+ject "grazer2.cos" 7
+dbg: outs "Reinjecting grazers..."
+endi
+
+* Gosh-hawk
+doif totl 2 16 1 le 0
+ject "Hawk.cos" 7
+dbg: outs "Reinjecting hawk..."
+endi
+
+* Hedgehog
+doif totl 2 15 5 le 0
+ject "hedgehog.cos" 7
+dbg: outs "Reinjecting hedgehog..."
+endi
+
+* Hoppity
+doif totl 2 15 12 le 0
+ject "hoppity.cos" 7
+dbg: outs "Reinjecting hoppity..."
+endi
+
+* Hummingbird
+doif totl 2 17 2 le 2
+ject "Hummingbird.cos" 7
+dbg: outs "Reinjecting hummingbird..."
+endi
+
+* Robin
+doif totl 2 15 1 le 1
+ject "Robin2.cos" 7
+dbg: outs "Reinjecting robin..."
+endi
+
+* Snail
+doif totl 2 17 7 le 0
+ject "snail.cos" 7
+dbg: outs "Reinjecting snail..."
+endi
+
+* Stickletrout
+doif totl 2 15 9 le 1
+ject "stickleback.cos" 7
+dbg: outs "Reinjecting trout..."
+endi
+
+* Woodpigeon
+doif totl 2 15 11 le 2
+ject "woodpigeon2.cos" 7
+dbg: outs "Reinjecting pigeons..."
+endi
+
+* Carrots
+doif totl 2 11 1 le 2
+ject "Carrot.cos" 7
+dbg: outs "Reinjecting carrots..."
+endi
+
+* Foxglove
+doif totl 2 4 1 le 1
+ject "PLANT MODEL -foxglove Seed.cos" 7
+dbg: outs "Reinjecting foxglove..."
+endi
+
+* Grass
+doif totl 2 6 1 le 3
+ject "grass.cos" 7
+dbg: outs "Reinjecting grass..."
+endi
+********************************************
+
+***** DESERT TERRARIUM *****
+* Cacbana
+doif totl 2 5 2 le 0
+ject "cacbana.cos" 7
+dbg: outs "Reinjecting cacbana..."
+endi
+
+* Desert Grass
+doif totl 2 6 4 le 1
+ject "desert grass.cos" 7
+dbg: outs "Reinjecting desert grass..."
+endi
+
+* Balloon Bug
+doif totl 2 13 9 le 0
+ject "balloon bug.cos" 7
+dbg: outs "Reinjecting balloon bug..."
+endi
+
+* Gnarler
+doif totl 2 15 22 le 0
+ject "gnarler.cos" 7
+dbg: outs "Reinjecting gnarler..."
+endi
+
+* Meerk
+doif totl 2 15 23 le 0
+ject "meerk.cos" 7
+dbg: outs "Reinjecting meerk..."
+endi
+
+* Uglee
+doif totl 2 16 8 le 0
+ject "Uglee.cos" 7
+dbg: outs "Reinjecting uglee..."
+endi
+*********************************************
+
+***** JUNGLE TERRARIUM *****
+* Dragonfly
+doif totl 2 15 8 le 0
+ject "dragonfly.cos" 7
+dbg: outs "Reinjecting dragonfly..."
+endi
+
+* Gnat
+doif totl 2 14 5 le 0
+ject "gnats.cos" 7
+dbg: outs "Reinjecting gnats..."
+endi
+
+* Kobold
+doif totl 2 16 7 le 0
+ject "Kobold.cos" 7
+dbg: outs "Reinjecting Kobold..."
+endi
+
+* Mossie Fly
+doif totl 2 14 4 le 0
+ject "mosquito.cos" 7
+dbg: outs "Reinjecting mossie fly..."
+endi
+
+* Piranha
+doif totl 2 16 3 le 0
+ject "piranha.cos" 7
+dbg: outs "Reinjecting piranha..."
+endi
+
+* Rhino Beetle
+doif totl 2 14 3 le 0
+ject "beetle.cos" 7
+dbg: outs "Reinjecting rhino beetle..."
+endi
+
+* Wasp
+doif totl 2 14 6 le 0
+ject "wasp.cos" 7
+dbg: outs "Reinjecting wasp..."
+endi
+
+* Fungi
+doif totl 2 8 5 le 0
+ject "fungi.cos" 7
+dbg: outs "Reinjecting fungi..."
+endi
+
+* Purbana
+doif totl 2 4 4 le 0
+ject "palmplant.cos" 7
+dbg: outs "Reinjecting Purbana..."
+endi
+
+* Tendril Plant
+doif totl 2 5 4 le 0
+ject "tendril.cos" 7
+dbg: outs "Reinjecting tendril plant..."
+endi
+**********************************************
+
+***** NORN MESO *****
+* Carrots
+doif totl 2 11 9 le 0
+ject "carrot pod.cos" 7
+dbg: outs "Reinjecting meso carrot pod..."
+endi
+endm
+
+
+* Removal script
+rscr
+enum 1 1 41606
+kill targ
+next
+scrx 1 1 41606 9
+
