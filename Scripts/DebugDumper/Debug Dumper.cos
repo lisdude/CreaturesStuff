@@ -1,0 +1,75 @@
+***
+* Debug Dumper
+* v1.0
+*
+* When enabled, periodically dump the debug log into a file.
+* (Note that this will not work in conjunction with any other
+*  tool or script that dumps the debug log.)
+*
+* By default, the file is called "Debug Output.txt" in the
+* current world directory. However, you can modify this with
+* the various object variables listed below by doing something
+* like: `rtar 1 1 41607 setv ovXX <value>`
+* e.g.  `rtar 1 1 41607 setv ov01 12000` to set the dump interval to 10 minutes.
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2024-03-22
+***
+
+*** Variables
+* ov00 - Enabled or disabled.               Default: Enabled (1)
+* ov01 - The dump interval (in ticks).      Default: 1 minute (1200)
+* ov02 - The directory for the log file.    Default: 0 (World Directory)
+* ov03 - The output file name.              Default: "Debug Output.txt"
+*        NOTE: Recommended to use FVWM before your actual file name.
+* ov04 - Append.                            Default: Yes (1)
+***
+
+new: simp 1 1 41607 "blnk" 0 0 0
+attr 16
+
+*** DEFAULTS
+* Enable
+setv ov00 1
+
+* Default dump every minute.
+setv ov01 1200
+
+* Save to the world journal directory.
+setv ov02 0
+
+* Default file name
+sets ov03 fvwm "Debug Output.txt"
+
+* Append.
+setv ov04 1
+***
+
+tick ov01
+
+scrp 1 1 41607 9
+doif ov00 ne 0
+    * Unfortunately, there seems to be no way to know if there's
+    * debug output to be collected. So we have to open and close
+    * the file every time. Pretty unfortunate.
+
+    * Set the output stream to the file.
+    file oope ov02 ov03 ov04
+    * Dump debug output to the stream.
+    dbg: poll
+    * Flush the file
+    file oflu
+    * Close the file
+    file iclo
+endi
+
+* Tick interval may have changed, so do it again.
+tick ov01
+endm
+
+* Removal script
+rscr
+enum 1 1 41607
+kill targ
+next
+scrx 1 1 41607 9
