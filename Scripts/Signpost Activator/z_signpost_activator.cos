@@ -1,62 +1,130 @@
 ***
 * Signpost Activator
-* v1.0
+* v1.1
 *
-* Activate all signposts without having to actually move to each room.
+* Activate all signposts without having to actually move to each metaroom.
+*
+* The order in which favorite places appear can be customized by changing:
+* va20: Docking Station specific metarooms.
+* va21: Creatures 3 specific metarooms.
+*
+* Both are a list of species separated by a dash ("-")
+* Any signposts not specified will be added in the order they're encountered.
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2022-08-10
+* Last Modified: 2024-04-08
 ***
 
-*** Variables
-* va01 - The species of the signpost.
-* va02 - The signpost's corresponding metaroom.
-***
+inst
 
-* Iterate through all signposts.
+* Docking Station order (Meso, Corridor, Comms, Workshop)
+sets va20 "10-11-8-9"
+* Creatures 3 order (Bridge, Engineering, Norn Terrarium, Jungle, Desert, Marine, Learning Room)
+sets va21 "6-5-1-2-3-4-7"
+
+************************************************************************************************
+
+* This could have been injected in an established world, so reset favourite places.
+enum 1 4 0
+    kill targ
+next
+
 enum 1 3 0
-* Make sure a corresponding icon doesn't already exist in the favorites bar.
-	doif ov00 eq 0
-* If it's not a Docking Station signpost and we're not docked, do nothing.
-* (I can't think of a better way to know if it's DS or not, so ridiculous bruteforce it is...)
-		setv va01 spcs
-		doif va01 ne 10 and va01 ne 9 and va01 ne 8 and va01 ne 11 and eame "engine_no_auxiliary_bootstrap_1" ne 0
-			ELSE
-* Mark that the signpost now has an icon.
-			setv ov00 1
-* Get the metaroom the signpost is in.
-			setv va02 gmap posx posy
-* Make the favorites icon.
-			new: simp 1 4 va01 gall 2 1 8505
-			tran 0 0
-			attr 308
-* Set the icon's position in the favorites stack.
-			setv ov50 game "ds_favourites"
-			addv game "ds_favourites" 1
-* Save the metaroom in the icon.
-			setv ov01 va02
-		endi
+    setv ov00 0
+next
+
+setv game "ds_favourites" 0
+**
+
+
+* Add Docking Station favorite places.
+sets va00 va20
+gsub parse_list
+
+* Add Creatures 3 favorite places (if applicable)
+doif eame "engine_no_auxiliary_bootstrap_1" ne 1
+    sets va00 va21
+    gsub parse_list
+endi
+
+* Add any other signposts that we didn't explicitly already activate.
+enum 1 3 0
+    doif ov00 eq 0
+        setv va10 spcs
+        gsub add_favourite_place
 	endi
 next
 
-* Meso is going to appear second, which is weird, so swap it with the hub.
-enum 1 4 10
-	setv ov50 0
-next
-enum 1 4 11
-	setv ov50 1
-next
-**
 
-* If docked, swap Norn Terrarium and Learning Room. Because their defaults are, in fact, weird.
-doif eame "engine_no_auxiliary_bootstrap_1" ne 1
-	enum 1 4 7
-		setv va01 ov50
-		setv ov50 game "ds_favourites"
-		subv ov50 1
-	next
-	enum 1 4 1
-		setv ov50 va01
-	next
-endi
-**
+subr add_favourite_place
+    * Make sure the metaroom actually exists. (This can happen in undocked worlds.)
+    doif gmap posx posy ge 0
+        * Mark that the signpost now has an icon.
+        	setv ov00 1
+        * Set the metaroom the signpost is in for later.
+        	setv va11 gmap posx posy
+        * Make the favorites icon.
+        	new: simp 1 4 va10 gall 2 1 8505
+        	tran 0 0
+        	attr 308
+        * Set the icon's position in the favorites stack.
+        	setv ov50 game "ds_favourites"
+        	addv game "ds_favourites" 1
+        * Save the metaroom in the icon.
+        	setv ov01 va11
+        * Start the movement timer.
+            mesg writ targ 9
+    endi
+retn
+
+
+* This unfortunate subroutine parses a dash-separated list of
+* species numbers and passes them to the add_favourite_place sub.
+* (If there's an easier / more obvious way to do this, please
+*  let me know!)
+subr parse_list
+    * va00 - Metaroom order. (Defined at the start of this script.)
+    * va01 - Next occurence of separator in string.
+    * va02 - Current position in string.
+    * va03 - Last position in string.
+    * va04 - String containing current number.
+    * va05 - Difference between current and last position. (the count)
+    * va06 - Length of the string.
+    * va10 - The final integer. (Used by add_favourite_place)
+
+    * Get the length of the metaroom order string.
+    setv va06 strl va00
+
+    * Set the starting position in the string to 1.
+    setv va02 1
+
+    loop
+        * Set the last position to the current position.
+        setv va03 va02
+
+        * Find the next occurrence of the separator ("-").
+        setv va01 sins va00 va02 "-"
+
+        * If no separator is found, set to end of string + 1.
+        doif va01 lt 0
+            setv va01 va06
+            addv va01 1
+        endi
+
+        * Calculate the count (difference between positions).
+        setv va05 va01
+        subv va05 va03
+
+        * Get the substring (current number) and convert to int.
+        sets va04 subs va00 va03 va05
+        setv va10 stoi va04
+
+        * Pass it to add_favourite_place.
+        rtar 1 3 va10
+        gsub add_favourite_place
+
+        * Move to the next position.
+        addv va01 1
+        setv va02 va01
+    untl va01 gt va06
+retn
