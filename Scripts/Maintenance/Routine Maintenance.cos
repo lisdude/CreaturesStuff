@@ -1,57 +1,71 @@
 ***
-* Maintenance Scripts
-* v1.0
+* Maintenance Script
+* v1.1
 *
 * Perform routine world maintenance, including:
 *
-* - Clean up zzzz's. (I'm not sure why they accumulate the way they do.)
-* - Euthanize Norns that are 1 hour old or older and still in the 'youth' life stage.
+* - Clean up unassociated zzzz's. (I'm not sure why they accumulate the way they do.)
+* - Euthanize creatures that are 1 hour old or older and still in the 'youth' life stage.
 * - Make sure the empathic food vendor isn't producing enormous sums of food.
-*
-* TODO: Incorporate Grazer waste fix and remove old script.
-*
-* Not really intended for distribution, just personal preference. But if you find
-* it handy, go nuts!
+* - Dump eggs out of vehicles.
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2021-12-21
+* Last Modified: 2024-06-24
 ***
 
 new: simp 1 1 41605 "blnk" 0 0 0
 attr 16
 
-* Check every thirty minutes.
-tick 36000
+* Check every fifteen minutes.
+tick 18000
 
 scrp 1 1 41605 9
-* Kill young Norns.
+* Kill excessively young creatures.
 	enum 4 0 0
 		doif targ ne null
 			doif cage eq 3 and tage ge 72000
-				sets va00 "Euthanized: "
+				sets va00 "Euthanized forever young: "
 				adds va00 hist name gtos 0
+                adds va00 " (age "
+                adds va00 vtos tage
+                adds va00 ")"
 				dbg: outs va00
 				dead
 			endi
 		endi
 	next
 
-* Kill zzzz's
+* Kill zzzz's if they don't belong to a creature.
 	enum 1 2 28
-		doif targ ne null
-			kill targ
-		endi
-	next
+    	doif targ ne null
+            doif type ov00 ne 7
+                sets va00 "Invalid zzzz's found at "
+                adds va00 vtos posx
+                adds va00 " x "
+                adds va00 vtos posy
+                dbg: outs va00
+	        	kill targ
+		    endi
+        endi
+    next
 
-* Kill food if there are >= 100
-	doif totl 2 8 6 ge 100
-		enum 2 8 6
-			doif targ ne null
-				kill targ
-			endi
-		next
-	endi
+* Keep empathic food to around 100 pieces.
+    loop
+        rtar 2 8 6
+        kill targ
+    untl totl 2 8 6 le 100
+
+* Dump eggs that are sitting in vehicles.
+    enum 3 1 0
+        doif targ ne null
+            doif type targ eq 6
+                dpas 3 4 0
+            endi
+        endi
+    next
+
 endm
+
 
 rscr
 enum 1 1 41605
