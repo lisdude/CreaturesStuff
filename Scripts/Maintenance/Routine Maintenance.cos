@@ -52,7 +52,9 @@ scrp 1 1 41605 9
 * Keep empathic food to around 100 pieces.
     loop
         rtar 2 8 6
-        kill targ
+        doif targ ne null
+            kill targ
+        endi
     untl totl 2 8 6 le 100
 
 * Dump eggs that are sitting in vehicles.
