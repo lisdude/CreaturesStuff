@@ -1,0 +1,49 @@
+***
+* Rotten Eggs
+* v1.0
+*
+* Cause eggs older than 5 hours (customizable via ov00) to rot, contributing some nutrients to the soil.
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2024-06-26
+***
+
+new: simp 1 1 41611 "blnk" 0 0 0
+attr 16
+
+* Default rot time: 5 hours
+setv ov00 360000
+
+* Run every five minutes
+tick 6000
+
+scrp 1 1 41611 9
+setv va01 ov00
+enum 3 4 0
+    doif targ ne null
+        doif name "laid_time" eq 0
+* Inform the egg of what time it was laid. Since we're not modifying the actual egg laying script, we approximate with the current tick.
+            setv name "laid_time" wtik
+        else
+            setv va00 wtik
+            subv va00 name "laid_time" 
+            doif va00 ge va01
+* The egg is older than 5 hours. Kill it and add some nutrients.
+* (Someday it might be fun to leave behind a gross sprite and let it slowly decay, but enh.)
+                doif room targ ne -1 and carr eq null
+                    altr -1 3 0.2
+                    altr -1 4 0.2
+                endi
+                kill targ
+            endi
+        endi
+    endi
+next
+
+endm
+
+rscr
+enum 1 1 41611
+    kill targ
+next
+scrx 1 1 41611 9

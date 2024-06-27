@@ -8,3 +8,4 @@ This is a collection of scripts and agents I've written for various purposes.
 - **Maintenance**: Perform maintenance operations to keep worlds snappy.
 - **Ecology Monitor**: Re-inject bits of the default ecology as they become extinct / endangered.
 - **Debug Dumper**: Periodically dump debug output into a file.
+- **Rotten Eggs**: Rot eggs that are older than five hours.
