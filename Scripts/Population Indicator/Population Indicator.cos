@@ -1,0 +1,183 @@
+***
+* Population Indicator
+* v1.0
+*
+* Add indicators for creature count and egg count to the favorite places icons.
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2024-06-30
+***
+
+new: simp 1 1 41613 "blnk" 0 0 0
+attr 16
+
+* Update every 2 seconds. Nothing can possibly go wrong!
+tick 40
+
+scrp 1 1 41613 9
+    gsub cleanup
+    gsub update_favorite_places
+    gsub update_creature_count
+    gsub update_egg_count
+    gsub update_indicators
+
+********************************************************************************************
+    
+* Iterate through favorite places and update the indicators.
+* - va00: The favorite place icon.
+* - va01: The metaroom.
+* - va02: The creature count.
+* - va03: The egg count.
+subr update_indicators
+enum 1 4 0
+    doif type name "population_counter" eq 5 and name "population_counter" ne null
+        seta va00 targ
+        setv va01 ov01
+        targ ownr
+        setv va02 name va01
+        mulv va01 1.0
+        setv va03 name va01
+        targ va00
+        * Updating both on the same tick just doesn't work. Weird.
+        mesg wrt+ name "population_counter" 1000 "creature" va02 0
+        mesg wrt+ name "population_counter" 1000 "egg" va03 1
+    endi
+next
+retn
+
+* Determine how populated each metaroom is.
+*  va00: Metaroom ID of current creature.
+*  va01: Current value of the metaroom name variable.
+subr update_creature_count
+enum 4 0 0
+    doif targ ne null
+        doif dead eq 0
+            * Get the creature's current metaroom
+                setv va00 gmap posx posy
+            * Get the metaroom's current population
+                targ ownr
+                setv va01 name va00
+            * Add one to that population
+                addv va01 1
+            * Set the variable to the new value.
+                setv name va00 va01
+        endi
+    endi
+next
+retn
+
+* Determine how many eggs are in each metaroom.
+*   - va00: Metaroom ID of the current egg.
+*   - va01: Current value of the metaroom name variable.
+subr update_egg_count
+enum 3 4 0
+    doif targ ne null
+    * Don't include hatched eggs or eggs in inventory.
+        doif pose ne 7 and carr ne game "c3_inventory"
+            * Get the current metaroom and convert it to decimal for storage.
+            setv va00 gmap posx posy
+            mulv va00 1.0
+            * Get the saved population.
+            targ ownr
+            setv va01 name va00
+            * Add one to the total.
+            addv va01 1
+            * Set the total back.
+            setv name va00 va01
+        endi
+    endi
+next
+retn
+
+* Update the text of the favorite places icons.
+* - va00: The favorite place icon.
+* - va01: The text indicator thingy.
+subr update_favorite_places
+enum 1 4 0
+    doif type name "population_counter" ne 5
+        * Create a new indicator object thingy.
+        seta va00 targ
+        new: comp 1 1 41614 "blank" 1 0 0
+        attr 32
+        seta va01 targ
+        targ va00
+        seta name "population_counter" va01
+        targ va01
+        pat: fixd 1 "blank" 0 0 0 10000 "whiteontransparentchars"
+        * Float relative to the favorite place icon.
+        frel va00
+        * Adjust down from the icon.
+        flto 0 30
+        part 1
+        frmt 6 7 0 0 0 0 0
+        ptxt "!"
+        pat: fixd 2 "blank" 0 0 0 10000 "whiteontransparentchars"
+        part 2
+        frmt 6 7 57 0 0 0 1
+        ptxt "!"
+    endi
+next
+retn
+
+* Clean up our name variables.
+*  va01: The current name variable.
+*  va02: Current count of unviable metarooms.
+*  va03: Loop control. CAOS seems to parse both sides of AND, so you can't use it when the second condition relies on the first being true. Sigh.
+*  va04: The previous name variable.
+subr cleanup
+    setv va02 0
+    sets va01 ""
+    sets va04 ""
+    setv va03 1
+    loop
+    * Set the previous name variable.
+        doif type va01 eq 2
+            sets va04 va01
+        else
+            setv va04 va01
+        endi
+
+    	namn va01
+
+    * If we got back an empty string, there are no more name variables and we signal the loop to end.
+        doif type va01 eq 2
+            doif va01 eq ""
+                setv va03 0
+            endi
+        else
+            deln va01
+    * We'll need to pass the previous variable back to NAMN to get the correct next one.
+            doif type va04 eq 2
+                sets va01 va04
+            else
+                setv va01 va04
+            endi
+        endi
+    untl va03 eq 0
+retn
+
+endm
+
+* Update the indicator text.
+scrp 1 1 41614 1000
+    doif _p1_ eq "creature"
+        part 1
+        ptxt vtos _p2_
+    elif _p1_ eq "egg"
+        part 2
+        ptxt vtos _p2_
+    endi
+endm
+
+rscr
+enum 1 1 41613
+    kill targ
+next
+enum 1 1 41614
+    kill targ
+next
+enum 1 4 0
+    deln "population_counter"
+next
+scrx 1 1 41613 9
+scrx 1 1 41614 1000

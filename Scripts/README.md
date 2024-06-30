@@ -10,3 +10,4 @@ This is a collection of scripts and agents I've written for various purposes.
 - **Debug Dumper**: Periodically dump debug output into a file.
 - **Rotten Eggs**: Rot eggs that are older than five hours.
 - **Egg Prioritizer**: Choose which egg to hatch based on criteria (such as desired population, egg density, and egg age).
+- **Population Indicator**: Add indicators to the favorite places icons for number of creatures and number of eggs in the room.
