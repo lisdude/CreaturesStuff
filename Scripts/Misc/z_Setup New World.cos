@@ -1,0 +1,134 @@
+***
+* A Whole New Woooooooorld
+* v1.0
+*
+* Remove various things from a new world that I find annoying and / or slow:
+*
+* - Cameras / camera monitors.
+* x DS portal dispenser (benchmark found it to be slow for some reason...)
+*   (removed this now that the warp is back)
+* - Most gadgets. Such clutter...
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2024-06-30
+***
+
+* DS cameras
+enum 3 8 50
+    kill targ
+next
+
+* DS monitors
+enum 3 3 104
+    kill targ
+next
+
+* Portal dispenser
+*enum 3 3 101
+*    kill targ
+*next
+
+* C3 cameras
+enum 3 3 34
+    kill targ
+next
+
+* C3 monitors
+enum 3 3 33
+    kill targ
+next
+
+* Output display gadgets
+enum 3 8 26
+    kill targ
+next
+
+* Numeric output tool
+enum 3 8 18
+    kill targ
+next
+
+* Antigen detector
+enum 3 8 20
+    kill targ
+next
+
+* Lightbox
+enum 3 8 4
+    kill targ
+next
+
+* Pregnancy indicator
+enum 3 8 17
+    kill targ
+next
+
+* Count gate
+enum 3 8 12
+    kill targ
+next
+
+* Logic gate
+enum 3 8 6
+    kill targ
+next
+
+* NOT gate
+enum 3 8 7
+    kill targ
+next
+
+* Light module
+enum 3 8 11
+    kill targ
+next
+
+* Radio box
+enum 3 8 5
+    kill targ
+next
+
+* Plus minus switch
+enum 3 3 14
+    kill targ
+next
+
+* Contact sensor
+enum 3 8 23
+    kill targ
+next
+
+* Sludge gun
+enum 3 8 2
+    kill targ
+next
+
+* Pulsed switch
+enum 3 8 3
+    kill targ
+next
+
+* Creature detector
+enum 3 8 1
+    kill targ
+next
+
+* Siren
+enum 3 8 8
+    kill targ
+next
+
+* Emergency medical transporter
+enum 3 8 9
+    kill targ
+next
+
+* Medical scanner
+enum 3 8 10
+    kill targ
+next
+
+* Delay gate
+enum 3 8 13
+    kill targ
+next

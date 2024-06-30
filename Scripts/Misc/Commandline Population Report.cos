@@ -1,0 +1,124 @@
+***
+* Command Line Population Report
+* v1.0
+*
+* Print a population report to the command line and debug console.
+* The stock metarooms should work fine. Other metarooms will require
+* adding to the script to change the IDs in the order of injection.
+*
+* Usage: ject "pop.cos" 4
+*
+* This is a "command line" script, so you just inject it each time
+* you want the information.
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2024-06-29
+***
+
+*   - va50: A pointer to the agent that will store the name variables.
+
+new: simp 1 1 41612 "blnk" 0 0 0
+attr 16
+
+seta va50 targ
+
+inst
+
+* Determine how populated each metaroom is.
+*  va00: Metaroom ID of current creature.
+*  va01: Current value of the metaroom name variable.
+enum 4 0 0
+    doif dead eq 0
+        * Get the creature's current metaroom
+            setv va00 gmap posx posy
+        * Get the metaroom's current population
+            targ va50
+            setv va01 name va00
+        * Add one to that population
+            addv va01 1
+        * Set the variable to the new value.
+            setv name va00 va01
+    endi
+next
+
+* Targ is ownr again. We want our name variables, though.
+targ va50
+
+dbg: outs "--------------------"
+outs      "--------------------\n"
+
+sets va01 ""
+setv va03 1
+loop
+	namn va01
+
+* If we got back an empty string, there are no more name variables and we signal the loop to end.
+    doif type va01 eq 2
+        doif va01 eq ""
+            setv va03 0
+        endi
+    endi
+
+    doif type va01 ne 2
+        setv va95 va01
+        gsub metaroom_name
+        sets va98 va95
+        adds va98 " ("
+        adds va98 vtos va01
+        adds va98 "): "
+        adds va98 vtos name va01
+        dbg: outs va98
+        outs va98
+        outs "\n"
+    endi
+untl va03 eq 0
+
+
+dbg: outs "--------------------"
+outs      "--------------------\n"
+
+
+*******************************************************************************
+
+* Take a metaroom number in va95 and return a metaroom name in va95.
+* Does it by bruteforce because I don't know if there's a catalogue for this
+* or some other intelligent way to figure it out.
+subr metaroom_name
+    doif va95 eq 0
+        sets va95 "Norn Terrarium"
+    elif va95 eq 1
+        sets va95 "Desert Terrarium"
+    elif va95 eq 2
+        sets va95 "Aquatic Terrarium"
+    elif va95 eq 3
+        sets va95 "Jungle Terrarium"
+    elif va95 eq 4
+        sets va95 "Bridge / Engineering"
+    elif va95 eq 5
+        sets va95 "Pinball"
+    elif va95 eq 6
+        sets va95 "Grendel Invaders"
+    elif va95 eq 7
+        sets va95 "Learning Room"
+    elif va95 eq 8
+        sets va95 "Crypt"
+    elif va95 eq 9
+        sets va95 "Injector Preview(?)"
+    elif va95 eq 10
+        sets va95 "Hub"
+    elif va95 eq 11
+        sets va95 "Norn Meso"
+    elif va95 eq 12
+        sets va95 "Workshop"
+    elif va95 eq 13
+        sets va95 "Comms Room"
+    elif va95 eq 14
+        sets va95 "Injector Preview(?)"
+    elif va95 eq 15
+        sets va95 "C1 Albia"
+    else
+        sets va95 "UNKNOWN"
+    endi
+retn
+
+kill va50
