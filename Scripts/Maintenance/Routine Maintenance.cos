@@ -1,16 +1,16 @@
 ***
 * Maintenance Script
-* v1.1
+* v1.2
 *
 * Perform routine world maintenance, including:
 *
 * - Clean up unassociated zzzz's. (I'm not sure why they accumulate the way they do.)
-* - Euthanize creatures that are 1 hour old or older and still in the 'youth' life stage.
 * - Make sure the empathic food vendor isn't producing enormous sums of food.
+* - Limit potions to 5.
 * - Dump eggs out of vehicles.
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2024-06-24
+* Last Modified: 2024-06-30
 ***
 
 new: simp 1 1 41605 "blnk" 0 0 0
@@ -20,20 +20,6 @@ attr 16
 tick 18000
 
 scrp 1 1 41605 9
-* Kill excessively young creatures.
-	enum 4 0 0
-		doif targ ne null
-			doif cage eq 3 and tage ge 72000
-				sets va00 "Euthanized forever young: "
-				adds va00 hist name gtos 0
-                adds va00 " (age "
-                adds va00 vtos tage
-                adds va00 ")"
-				dbg: outs va00
-				dead
-			endi
-		endi
-	next
 
 * Kill zzzz's if they don't belong to a creature.
 	enum 1 2 28
@@ -53,9 +39,22 @@ scrp 1 1 41605 9
     loop
         rtar 2 8 6
         doif targ ne null
+        * Give the room a tiny amount of nutrients when we 'rot' the food.
+        doif room targ ne -1 and carr eq null
+            altr -1 3 0.003
+            altr -1 4 0.003
+        endi
             kill targ
         endi
     untl totl 2 8 6 le 100
+
+* Keep potions to a minimum of 5.
+    loop
+        rtar 2 25 0
+        doif targ ne null
+            kill targ
+        endi
+    untl totl 2 25 0 le 5
 
 * Dump eggs that are sitting in vehicles.
     enum 3 1 0
@@ -67,7 +66,6 @@ scrp 1 1 41605 9
     next
 
 endm
-
 
 rscr
 enum 1 1 41605

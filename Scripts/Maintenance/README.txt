@@ -1,11 +1,11 @@
-Routine Maintenance v1.1
+Routine Maintenance v1.2
 ------------------------
 Perform routine maintenance operations every 30 minutes intended to keep the world snappy and happy.
 
 NOTE: These tasks may not apply to you or conform to your specific preferences. Current operations are:
 - Kill all Zzzz's that aren't associated with creatures.
-- Euthanize creatures that are 1 hour old or older and still in the 'youth' life stage.
 - Limit the amount of food lying around from the empathic vendor once it surpasses 100.
+- Limit the amount of potions to 5.
 - Eject eggs from vehicles.
 
 ================================================================================================
@@ -25,5 +25,5 @@ Feel free to share and archive to your heart's content! All I ask is that you le
 ================================================================================================
 
 Author:         lisdude@lisdude.com
-Last Modified:  2024-06-24
+Last Modified:  2024-06-30
 Source Code:    https://github.com/lisdude/CreaturesStuff
