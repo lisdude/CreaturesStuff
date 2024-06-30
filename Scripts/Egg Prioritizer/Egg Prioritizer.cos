@@ -1,12 +1,12 @@
 ***
 * Egg Prioritizer
-* v1.0
+* v1.1
 *
 * Usurp the normal egg timing mechanism and replace it with a weighted chance of hatching.
 * The criteria for scoring eggs is:
 *   - How populated the metaroom is vs its ideal population. (Highest weight.)
-*   - How many eggs are in the metaroom vs total eggs in the game. (Medium weight.)
-*   - The age of the egg. (Lowest weight.)
+*   - How many eggs are in the metaroom vs total eggs in the game. (Lowest weight.)
+*   - The age of the egg. (Medium weight.)
 *
 * The highest scoring egg is hatched.
 *
@@ -66,15 +66,15 @@ mulv ov00 1.0
 setv ov04 0
 
 * Population weight
-setv ov01 0.5
+setv ov01 0.6
 mulv ov01 1.0
 
 * Egg density weight
-setv ov02 0.3
+setv ov02 0.1
 mulv ov02 1.0
 
 * Egg age weight
-setv ov03 0.2
+setv ov03 0.3
 mulv ov03 1.0
 
 * Debug message toggle

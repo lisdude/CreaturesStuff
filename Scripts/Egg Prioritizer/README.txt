@@ -1,4 +1,4 @@
-Egg Prioritizer v1.0
+Egg Prioritizer v1.1
 ------------------------
 Usurp the normal egg timing mechanism and replace it with a weighted chance of hatching.
 The criteria for scoring eggs is:
