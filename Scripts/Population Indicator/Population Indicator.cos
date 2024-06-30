@@ -1,6 +1,6 @@
 ***
 * Population Indicator
-* v1.0
+* v1.1
 *
 * Add indicators for creature count and egg count to the favorite places icons.
 *
@@ -21,8 +21,11 @@ scrp 1 1 41613 9
     gsub update_egg_count
     gsub update_indicators
 
+    * Restore the tick if world start changed it.
+    tick 40
+
 ********************************************************************************************
-    
+
 * Iterate through favorite places and update the indicators.
 * - va00: The favorite place icon.
 * - va01: The metaroom.
@@ -158,6 +161,18 @@ retn
 
 endm
 
+* The associations between the text and the favorite places icons seems to get weird
+* after reloading. So redo it. sigh.
+scrp 1 1 41613 128
+enum 1 4 0
+    doif type name "population_counter" eq 5
+        kill name "population_counter"
+        deln "population_counter"
+    endi
+next
+tick 1
+endm
+
 * Update the indicator text.
 scrp 1 1 41614 1000
     doif _p1_ eq "creature"
@@ -180,4 +195,5 @@ enum 1 4 0
     deln "population_counter"
 next
 scrx 1 1 41613 9
+scrx 1 1 41613 128
 scrx 1 1 41614 1000

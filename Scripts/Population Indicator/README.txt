@@ -1,5 +1,5 @@
-Population Indicator v1.0
-------------------------
+Population Indicator v1.1
+-------------------------
 Add indicators for creature count and egg count to the favorite places icons.
 
 ================================================================================================
@@ -15,6 +15,12 @@ Existing Worlds or Updating:
 
 Sharing, Distribution, Archiving, Etc:
 Feel free to share and archive to your heart's content! All I ask is that you leave this README intact so people know where to find the latest source code.
+
+================================================================================================
+
+Changelog:
+v1.1            Fix an issue where the text would float... strangely... after reloading the world.
+v1.0            Initial release.
 
 ================================================================================================
 
