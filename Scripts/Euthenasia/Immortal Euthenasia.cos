@@ -1,0 +1,42 @@
+***
+* Immortal Euthanasia
+* v1.1
+*
+* Humanely euthanize any creature older than 9 hours.
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2024-06-30
+***
+
+new: simp 1 1 41604 "blnk" 0 0 0
+attr 16
+
+* Check every five minutes.
+tick 6000
+
+* Since I'm not 100% clear on the order of operations of CAOS AND and OR, use variables.
+*   - va00: Debug message.
+*   - va01: Older than 9 hours?
+*   - va02: Life stage 'youth' but older than 1 hour?
+scrp 1 1 41604 9
+	enum 4 0 0
+		doif targ ne null
+        setv va01 tage gt 648000
+        setv va02 cage eq 3 and tage ge 72000
+			doif va01 ne 0 or va02 ne 0
+                sets va00 "Euthanized: "
+				adds va00 hist name gtos 0
+                adds va00 " (age "
+                adds va00 vtos tage
+                adds va00 ")"
+				dbg: outs va00
+				dead
+			endi
+		endi
+	next
+
+rscr
+enum 1 1 41604
+	kill targ
+next
+scrx 1 1 41604 9
