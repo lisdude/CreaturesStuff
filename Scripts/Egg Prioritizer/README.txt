@@ -23,6 +23,10 @@ rtar 1 1 41609 setv ov02 0.0      => Set the weight of the metaroom egg density 
 rtar 1 1 41609 setv ov03 0.2      => Set the weight of the egg age to 0.2.
 rtar 1 1 41609 setv ov04 1        => Enable hard cap.
 rtar 1 1 41609 setv ov05 1        => Enable debug messages.
+
+NOTE: The Norn Meso heat pan will still hatch eggs normally! This means you, or a Norn, can drop
+      an egg there and it will hatch before any of the eggs prioritized by this script.
+
 ================================================================================================
 
 Installation:
