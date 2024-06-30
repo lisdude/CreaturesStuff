@@ -1,0 +1,497 @@
+***
+* Egg Prioritizer
+* v1.0
+*
+* Usurp the normal egg timing mechanism and replace it with a weighted chance of hatching.
+* The criteria for scoring eggs is:
+*   - How populated the metaroom is vs its ideal population. (Highest weight.)
+*   - How many eggs are in the metaroom vs total eggs in the game. (Medium weight.)
+*   - The age of the egg. (Lowest weight.)
+*
+* The highest scoring egg is hatched.
+*
+* You can customize this in various ways. For example, if you want to disable a scoring
+* criteria, you can simply set its weight to 0.0.
+*
+* You can also change ov00 to the maximum number of creatures in a metaroom. By default,
+* this isn't a hard cap; metarooms can exceed this number. However, it heavily encourages
+* eggs in other metarooms to hatch if the population of another exceeds this number. If
+* you DO want it to be a hard cap, you can set ov04 to 1.
+*
+* If you want to change these values without re-injecting, you can do so with these commands:
+* rtar 1 1 41609 setv ov00 15.0     => Set the upper limit of creatures in a metaroom.
+* rtar 1 1 41609 setv ov01 0.4      => Set the weight of the metaroom population to 0.4.
+* rtar 1 1 41609 setv ov02 0.0      => Set the weight of the metaroom egg density to 0.0.
+* rtar 1 1 41609 setv ov03 0.2      => Set the weight of the egg age to 0.2.
+* rtar 1 1 41609 setv ov04 1        => Enable hard cap.
+* rtar 1 1 41609 setv ov05 1        => Enable debug messages.
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2024-06-30
+***
+
+** Variables:
+*  Global
+*   - ov00: Maximum desired population per metaroom.
+*   - ov01: Population weight.
+*   - ov02: Egg density weight.
+*   - ov03: Egg age weight
+*   - ov04: Hard cap option.
+*   - ov05: Debug messages.
+*  Egg-related
+*   - va50: Current high score.
+*   - va51: Current highest scoring egg agent.
+*   - va52: Total eggs.
+*  Stuff
+*   - va53: Total non-dead creatures.
+*  Debugging
+*   - va98: Debug message string.
+*   - va95: Argument / return value for metaroom name subroutine.
+
+****** TODO: We need to deal with the heatpan. It changes the egg tick from 1-100. Solutions I see are:
+*            1. Feature. You can put your eggs on the pan and they hatch, overriding the bias. (Of course less featureful when NORNS do it...)
+*            2. (Not ideal.) Run this script every 10 or so ticks to reset egg timers to 0. Record the wtik and only run the beef of the script at 595 equivalent.
+*            3. Include another script that overrides the heatpan timer script. People can install if they want.
+******       Per-metaroom population limits. Rather than a global limit, allow individual metarooms to be customized.
+
+new: simp 1 1 41609 "blnk" 0 0 0
+attr 16
+
+* The maximum population of a metaroom. When this is exceeded, we look to hatch in a more free area if possible.
+setv ov00 16.0
+* Ensure the number is a float if it gets changed.
+mulv ov00 1.0
+
+* Hard cap: When 1, a metaroom will not hatch eggs at all if the population is >= the max population.
+setv ov04 0
+
+* Population weight
+setv ov01 0.5
+mulv ov01 1.0
+
+* Egg density weight
+setv ov02 0.3
+mulv ov02 1.0
+
+* Egg age weight
+setv ov03 0.2
+mulv ov03 1.0
+
+* Debug message toggle
+setv ov05 0
+
+* Run slightly under every 30 seconds to usurp egg timers.
+tick 595
+
+scrp 1 1 41609 9
+inst
+lock
+
+* Get the total number of not-dead Norns so we know when we can skip calculating egg scores.
+setv va52 0
+enum 4 0 0
+    doif dead eq 0
+        addv va52 1
+    endi
+next
+
+* If we can't hatch any eggs anyway, just update the egg laid_times and nothing else.
+doif va52 ge game "breeding_limit"
+    doif ov05 ne 0
+        dbg: outs "No eggs can hatch due to population limits. Skipping egg bias and updating laid_time..."
+    endi
+    enum 3 4 0
+        gsub set_laid_time
+    next
+    stop
+endi
+
+* Clear the highest scoring egg.
+setv va50 0
+seta va51 null
+
+* Keep tabs of how many eggs we have.
+*setv va52 totl 3 4 0
+* ... woops. We can't use totl because eggs in inventory will mess up our calculation.
+*     Calculated below.
+*mulv va52 1.0
+setv va52 0
+
+doif ov05 ne 0
+    dbg: outs "---------------------------------------------------"
+    sets va98 "Desired metaroom population: "
+    adds va98 vtos ov00
+    dbg: outs va98
+    sets va98 "Creature count: "
+    adds va98 vtos totl 4 0 0
+    dbg: outs va98
+    sets va98 "Hard cap: "
+    doif ov04 ne 0
+        adds va98 "Yes"
+    else
+        adds va98 "No"
+    endi
+    dbg: outs va98
+endi
+
+* Determine how populated each metaroom is.
+*  va00: Metaroom ID of current creature.
+*  va01: Current value of the metaroom name variable.
+enum 4 0 0
+    doif targ ne null
+        doif dead eq 0
+            * Get the creature's current metaroom
+                setv va00 gmap posx posy
+            * Get the metaroom's current population
+                targ ownr
+                setv va01 name va00
+            * Add one to that population
+                addv va01 1
+            * Set the variable to the new value.
+                setv name va00 va01
+        endi
+    endi
+next
+
+* Determine how many eggs are in each metaroom.
+* Since number of creatures is indexed by the metaroom ID,
+* number of eggs is indexed by the metaroom ID as a float.
+*   - va00: Metaroom ID of the current egg.
+*   - va01: Current value of the metaroom name variable.
+enum 3 4 0
+    doif targ ne null
+    * Don't include hatched eggs or eggs in inventory.
+        doif pose ne 7 and carr ne game "c3_inventory"
+            addv va52 1
+            * Get the current metaroom and convert it to float for storage.
+            setv va00 gmap posx posy
+            mulv va00 1.0
+            * Get the saved population.
+            targ ownr
+            setv va01 name va00
+            * Add one to the total.
+            addv va01 1
+            * Set the total back.
+            setv name va00 va01
+        endi
+    endi
+next
+
+* Make sure egg count is a float for math purposes.
+mulv va52 1.0
+
+doif ov05 ne 0
+    sets va98 "Egg count: "
+    adds va98 vtos va52
+    dbg: outs va98
+
+    dbg: outs " ------ Norns ------"
+    sets va01 ""
+    setv va03 1
+    loop
+    	namn va01
+
+    * If we got back an empty string, there are no more name variables and we signal the loop to end.
+        doif type va01 eq 2
+            doif va01 eq ""
+                setv va03 0
+            endi
+        endi
+
+        doif type va01 ne 2 and type va01 ne 1
+            setv va95 va01
+            gsub metaroom_name
+            sets va98 va95
+            adds va98 " ("
+            adds va98 vtos va01
+            adds va98 "): "
+            adds va98 vtos name va01
+            dbg: outs va98
+            outs va98
+            outs "\n"
+        endi
+    untl va03 eq 0
+
+    dbg: outs "------- Eggs -------"
+    sets va01 ""
+    setv va03 1
+    loop
+    	namn va01
+
+    * If we got back an empty string, there are no more name variables and we signal the loop to end.
+        doif type va01 eq 2
+            doif va01 eq ""
+                setv va03 0
+            endi
+        endi
+
+        doif type va01 eq 1
+            setv va95 va01
+            gsub metaroom_name
+            sets va98 va95
+            adds va98 " ("
+            adds va98 vtos va01
+            adds va98 "): "
+            adds va98 vtos name va01
+            dbg: outs va98
+            outs va98
+            outs "\n"
+        endi
+    untl va03 eq 0
+    dbg: outs "--------------------"
+endi
+
+* Take over the timer for all eggs, reset gonna_hatch, and set laid_time if necessary.
+* Weights:
+* - va00: Metaroom.
+* - va05: Normalized population.
+* - va06: Normalized egg density.
+* - va07: Normalized egg age.
+* - va09: Egg score.
+* - va10: Current world tick.
+* - va11: Egg laid time.
+* - va12: The current egg for targ switching shenanigans... oh dear.
+setv va10 wtik
+mulv va10 1.0
+
+enum 3 4 0
+    doif targ ne null
+        seta va12 targ
+        gsub set_laid_time
+* Don't mess with egg timers until they're ready to hatch. (This way they still grow.)
+        doif pose ge 3 and pose ne 7
+            tick 0
+            doif name "gonna_hatch" eq 1
+                setv name "gonna_hatch" 0
+            endi
+        endi
+* If the egg is viable, calculate its hatchability score.
+        setv va00 gmap posx posy
+        doif pose ne 7 and pose ge 3 and carr ne game "c3_inventory" and rtyp room va12 ne -1 and rtyp room va12 ne 8 and rtyp room va12 ne 9 and carr eq null and fall ne 1
+            targ ownr
+            * Population:
+            setv va05 name va00
+            doif ov04 ne 0 and va05 ge ov00
+                doif ov05 ne 0
+                    dbg: outs "Skipping metaroom due to hard cap being enabled and the population at max."
+                endi
+            else
+*                sets va98 "va05 = "
+*                adds va98 vtos va05
+*                adds va98 " - "
+                divv va05 ov00
+*                adds va98 vtos va05
+*                adds va98 " - "
+                subv va05 1.0
+                mulv va05 -1
+*                adds va98 vtos va05
+*                adds va98 " - "
+                mulv va05 ov01
+*                adds va98 vtos va05
+*                dbg: outs va98
+
+                * Egg density:
+                mulv va00 1.0
+                setv va06 name va00
+                divv va06 va52
+                subv va06 1.0
+                mulv va06 -1
+                mulv va06 ov02
+
+                * Egg age:
+                setv va07 va10
+                targ va12
+                setv va11 name "laid_time"
+                subv va07 va11
+                divv va07 va10
+                subv va07 1.0
+                mulv va07 -1
+                mulv va07 ov03
+
+                * Final score
+                setv va09 0
+                addv va09 va05
+                addv va09 va06
+                addv va09 va07
+
+    * Check if this egg is our winner.
+                doif va09 gt va50
+                    setv va50 va09
+                    seta va51 va12
+                endi
+
+                targ ownr
+
+                doif ov05 ne 0
+                    targ va12
+                    dbg: outs "-----"
+                    setv va00 gmap posx posy
+                    sets va98 "Metaroom: "
+                    setv va95 va00
+                    gsub metaroom_name
+                    adds va98 va95
+                    adds va98 " ("
+                    adds va98 vtos va00
+                    adds va98 ")"
+                    dbg: outs va98
+                    sets va98 "Metaroom creature population: "
+                    targ ownr
+                    adds va98 vtos name va00
+                    targ va12
+                    dbg: outs va98
+                    sets va98 "Metaroom number of eggs: "
+                    targ ownr
+                    mulv va00 1.0
+                    adds va98 vtos name va00
+                    targ va12
+                    dbg: outs va98
+                    sets va98 "World tick: "
+                    adds va98 vtos va10
+                    dbg: outs va98
+                    sets va98 "Normalized population: "
+                    adds va98 vtos va05
+                    dbg: outs va98
+                    sets va98 "Normalized egg density: "
+                    adds va98 vtos va06
+                    dbg: outs va98
+                    sets va98 "Normalized egg age: "
+                    adds va98 vtos va07
+                    dbg: outs va98
+                    sets va98 "\nFinal egg score: "
+                    adds va98 vtos va09
+                    dbg: outs va98
+                    dbg: outs "-----"
+                endi
+            endi
+        endi
+    endi
+next
+
+* Check if we have an egg to hatch and then, you know... hatch it.
+doif va51 ne null
+    doif ov05 ne 0
+        targ va51
+        setv va00 gmap posx posy
+        setv va95 va00
+        sets va98 "Chosen egg: "
+        gsub metaroom_name
+        adds va98 va95
+        adds va98 " ("
+        adds va98 vtos va00
+        adds va98 ") at "
+        adds va98 vtos posx
+        adds va98 " x "
+        adds va98 vtos posy
+        dbg: outs va98
+    endi
+
+    targ va51
+    tick 1
+else
+    doif ov05 ne 0
+        dbg: outs "No viable egg found for hatching."
+    endi
+endi
+
+targ ownr
+gsub cleanup
+
+*******************************************************************************
+
+* Take a metaroom number in va95 and return a metaroom name in va95.
+* Does it by bruteforce because I don't know if there's a catalogue for this.
+* This will only be accurate for the stock metarooms. If you're here and have
+* debug enabled, you might want to adjust this for your metaroom needs.
+subr metaroom_name
+    doif va95 eq 0
+        sets va95 "Norn Terrarium"
+    elif va95 eq 1
+        sets va95 "Desert Terrarium"
+    elif va95 eq 2
+        sets va95 "Aquatic Terrarium"
+    elif va95 eq 3
+        sets va95 "Jungle Terrarium"
+    elif va95 eq 4
+        sets va95 "Bridge / Engineering"
+    elif va95 eq 5
+        sets va95 "Pinball"
+    elif va95 eq 6
+        sets va95 "Grendel Invaders"
+    elif va95 eq 7
+        sets va95 "Learning Room"
+    elif va95 eq 8
+        sets va95 "Crypt"
+    elif va95 eq 9
+        sets va95 "Injector Preview(?)"
+    elif va95 eq 10
+        sets va95 "Hub"
+    elif va95 eq 11
+        sets va95 "Norn Meso"
+    elif va95 eq 12
+        sets va95 "Workshop"
+    elif va95 eq 13
+        sets va95 "Comms Room"
+    elif va95 eq 14
+        sets va95 "Injector Preview(?)"
+    elif va95 eq 15
+        sets va95 "C1 Albia"
+    else
+        sets va95 "UNKNOWN"
+    endi
+retn
+
+* Clean up our name variables.
+*  va01: The current name variable.
+*  va02: Current count of unviable metarooms.
+*  va03: Loop control. CAOS seems to parse both sides of AND, so you can't use it when the second condition relies on the first being true. Sigh.
+*  va04: The previous name variable.
+subr cleanup
+    setv va02 0
+    sets va01 ""
+    sets va04 ""
+    setv va03 1
+    loop
+    * Set the previous name variable.
+        doif type va01 eq 2
+            sets va04 va01
+        else
+            setv va04 va01
+        endi
+
+    	namn va01
+
+    * If we got back an empty string, there are no more name variables and we signal the loop to end.
+        doif type va01 eq 2
+            doif va01 eq ""
+                setv va03 0
+            endi
+        else
+            deln va01
+    * We'll need to pass the previous variable back to NAMN to get the correct next one.
+            doif type va04 eq 2
+                sets va01 va04
+            else
+                setv va01 va04
+            endi
+        endi
+    untl va03 eq 0
+retn
+
+* Set the time (more or less) that an egg was laid.
+subr set_laid_time
+doif targ ne null
+    doif name "laid_time" eq 0
+        * Inform the egg of what time it was laid. Since we're not modifying the actual egg laying script, we approximate with the current tick.
+        setv name "laid_time" wtik
+    endi
+endi
+retn
+
+unlk
+endm
+
+rscr
+enum 1 1 41609
+    kill targ
+next
+scrx 1 1 41609 9
