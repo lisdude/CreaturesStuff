@@ -1,6 +1,6 @@
 ***
 * Population Indicator
-* v1.1
+* v1.2
 *
 * Add indicators for creature count and egg count to the favorite places icons.
 *
@@ -11,10 +11,11 @@
 new: simp 1 1 41613 "blnk" 0 0 0
 attr 16
 
-* Update every 2 seconds. Nothing can possibly go wrong!
-tick 40
+* Update every second. Nothing can possibly go wrong!
+tick 20
 
 scrp 1 1 41613 9
+    inst
     gsub cleanup
     gsub update_favorite_places
     gsub update_creature_count
@@ -31,19 +32,26 @@ scrp 1 1 41613 9
 * - va01: The metaroom.
 * - va02: The creature count.
 * - va03: The egg count.
+* - va04: The text thingy.
 subr update_indicators
 enum 1 4 0
     doif type name "population_counter" eq 5 and name "population_counter" ne null
+        seta va04 name "population_counter"
         seta va00 targ
         setv va01 ov01
         targ ownr
         setv va02 name va01
         mulv va01 1.0
         setv va03 name va01
-        targ va00
-        * Updating both on the same tick just doesn't work. Weird.
-        mesg wrt+ name "population_counter" 1000 "creature" va02 0
-        mesg wrt+ name "population_counter" 1000 "egg" va03 1
+        targ va04
+        part 1
+        doif stoi ptxt ne va02
+            mesg wrt+ va04 1000 "creature" va02 0
+        endi
+        part 2
+        doif stoi ptxt ne va03
+            mesg wrt+ va04 1000 "egg" va03 1
+        endi
     endi
 next
 retn
@@ -96,6 +104,7 @@ retn
 * - va00: The favorite place icon.
 * - va01: The text indicator thingy.
 subr update_favorite_places
+*inst
 enum 1 4 0
     doif type name "population_counter" ne 5
         * Create a new indicator object thingy.
@@ -113,13 +122,14 @@ enum 1 4 0
         flto 0 30
         part 1
         frmt 6 7 0 0 0 0 0
-        ptxt "!"
+        ptxt "0"
         pat: fixd 2 "blank" 0 0 0 10000 "whiteontransparentchars"
         part 2
         frmt 6 7 57 0 0 0 1
-        ptxt "!"
+        ptxt "0"
     endi
 next
+*slow
 retn
 
 * Clean up our name variables.
@@ -130,15 +140,15 @@ retn
 subr cleanup
     setv va02 0
     sets va01 ""
-    sets va04 ""
+*    sets va04 ""
     setv va03 1
     loop
     * Set the previous name variable.
-        doif type va01 eq 2
-            sets va04 va01
-        else
-            setv va04 va01
-        endi
+*        doif type va01 eq 2
+*            sets va04 va01
+*        else
+*            setv va04 va01
+*        endi
 
     	namn va01
 
@@ -148,13 +158,14 @@ subr cleanup
                 setv va03 0
             endi
         else
-            deln va01
+            setv name va01 0
+*            deln va01
     * We'll need to pass the previous variable back to NAMN to get the correct next one.
-            doif type va04 eq 2
-                sets va01 va04
-            else
-                setv va01 va04
-            endi
+*            doif type va04 eq 2
+*                sets va01 va04
+*            else
+*                setv va01 va04
+*            endi
         endi
     untl va03 eq 0
 retn

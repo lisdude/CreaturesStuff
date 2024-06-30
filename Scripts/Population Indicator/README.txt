@@ -1,4 +1,4 @@
-Population Indicator v1.1
+Population Indicator v1.2
 -------------------------
 Add indicators for creature count and egg count to the favorite places icons.
 
@@ -19,6 +19,7 @@ Feel free to share and archive to your heart's content! All I ask is that you le
 ================================================================================================
 
 Changelog:
+v1.2            Make it faster.
 v1.1            Fix an issue where the text would float... strangely... after reloading the world.
 v1.0            Initial release.
 
