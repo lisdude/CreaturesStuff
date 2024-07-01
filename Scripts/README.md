@@ -11,3 +11,5 @@ This is a collection of scripts and agents I've written for various purposes.
 - **Rotten Eggs**: Rot eggs that are older than five hours.
 - **Egg Prioritizer**: Choose which egg to hatch based on criteria (such as desired population, egg density, and egg age).
 - **Population Indicator**: Add indicators to the favorite places icons for number of creatures and number of eggs in the room.
+- **Dismiss Life Events**: Dismiss all life events when you right-click on one.
+- **Misc**: Miscellaneous scripts that are probably useless.
