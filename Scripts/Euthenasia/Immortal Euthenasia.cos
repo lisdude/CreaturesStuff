@@ -1,6 +1,6 @@
 ***
 * Immortal Euthanasia
-* v1.1
+* v1.2
 *
 * Humanely euthanize any creature older than 9 hours.
 *
@@ -21,8 +21,12 @@ tick 6000
 scrp 1 1 41604 9
 	enum 4 0 0
 		doif targ ne null
-        setv va01 tage gt 648000
-        setv va02 cage eq 3 and tage ge 72000
+        doif tage gt 648000
+            setv va01 1
+        endi
+        doif cage eq 3 and tage ge 72000
+            setv va02 1
+        endi
 			doif va01 ne 0 or va02 ne 0
                 sets va00 "Euthanized: "
 				adds va00 hist name gtos 0
@@ -34,6 +38,7 @@ scrp 1 1 41604 9
 			endi
 		endi
 	next
+endm
 
 rscr
 enum 1 1 41604

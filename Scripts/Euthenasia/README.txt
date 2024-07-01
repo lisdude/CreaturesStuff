@@ -1,4 +1,4 @@
-Euthenasia v1.1
+Euthenasia v1.2
 ------------------------
 Humanely euthanize creatures that are 1 hour old or older and still in the 'youth' life stage.
 Also euthanize creatures that are older than 9 hours.
@@ -20,5 +20,5 @@ Feel free to share and archive to your heart's content! All I ask is that you le
 ================================================================================================
 
 Author:         lisdude@lisdude.com
-Last Modified:  2024-06-30
+Last Modified:  2024-07-01
 Source Code:    https://github.com/lisdude/CreaturesStuff
