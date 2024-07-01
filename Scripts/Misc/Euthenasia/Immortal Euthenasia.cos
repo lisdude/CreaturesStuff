@@ -27,7 +27,7 @@ scrp 1 1 41604 9
         doif cage eq 3 and tage ge 72000
             setv va02 1
         endi
-			doif va01 ne 0 or va02 ne 0
+			doif va01 eq 1 or va02 eq 1
                 sets va00 "Euthanized: "
 				adds va00 hist name gtos 0
                 adds va00 " (age "
