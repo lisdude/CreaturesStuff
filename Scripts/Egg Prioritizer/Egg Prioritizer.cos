@@ -1,6 +1,6 @@
 ***
 * Egg Prioritizer
-* v1.1
+* v1.2
 *
 * Usurp the normal egg timing mechanism and replace it with a weighted chance of hatching.
 * The criteria for scoring eggs is:
@@ -80,6 +80,11 @@ mulv ov03 1.0
 * Debug message toggle
 setv ov05 0
 
+* Set a game variable indicating this is installed.
+* (this way this script and the egg rotter can decide
+*  whether or not to remove the egg constructor)
+setv game "egg_prioritizer" 1
+
 * Run slightly under every 30 seconds to usurp egg timers.
 tick 595
 
@@ -95,14 +100,11 @@ enum 4 0 0
     endi
 next
 
-* If we can't hatch any eggs anyway, just update the egg laid_times and nothing else.
+* Can't hatch any eggs.
 doif va52 ge game "breeding_limit"
     doif ov05 ne 0
-        dbg: outs "No eggs can hatch due to population limits. Skipping egg bias and updating laid_time..."
+        dbg: outs "No eggs can hatch due to population limits. Skipping egg bias..."
     endi
-    enum 3 4 0
-        gsub set_laid_time
-    next
     stop
 endi
 
@@ -241,7 +243,7 @@ doif ov05 ne 0
     dbg: outs "--------------------"
 endi
 
-* Take over the timer for all eggs, reset gonna_hatch, and set laid_time if necessary.
+* Take over the timer for all eggs and reset gonna_hatch.
 * Weights:
 * - va00: Metaroom.
 * - va05: Normalized population.
@@ -257,7 +259,6 @@ mulv va10 1.0
 enum 3 4 0
     doif targ ne null
         seta va12 targ
-        gsub set_laid_time
 * Don't mess with egg timers until they're ready to hatch. (This way they still grow.)
         doif pose ge 3 and pose ne 7
             tick 0
@@ -477,21 +478,19 @@ subr cleanup
     untl va03 eq 0
 retn
 
-* Set the time (more or less) that an egg was laid.
-subr set_laid_time
-doif targ ne null
-    doif name "laid_time" eq 0
-        * Inform the egg of what time it was laid. Since we're not modifying the actual egg laying script, we approximate with the current tick.
-        setv name "laid_time" wtik
-    endi
-endi
-retn
-
 unlk
 endm
 
+scrp 3 4 0 10
+setv name "laid_time" wtik
+endm
+
 rscr
+delg "egg_prioritizer"
 enum 1 1 41609
     kill targ
 next
 scrx 1 1 41609 9
+doif game "egg_rotter" eq 0
+    scrx 3 4 0 10
+endi

@@ -1,4 +1,4 @@
-Egg Prioritizer v1.1
+Egg Prioritizer v1.2
 ------------------------
 Usurp the normal egg timing mechanism and replace it with a weighted chance of hatching.
 The criteria for scoring eggs is:
@@ -44,5 +44,5 @@ Feel free to share and archive to your heart's content! All I ask is that you le
 ================================================================================================
 
 Author:         lisdude@lisdude.com
-Last Modified:  2024-06-30
+Last Modified:  2024-07-01
 Source Code:    https://github.com/lisdude/CreaturesStuff
