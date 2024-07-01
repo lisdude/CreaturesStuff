@@ -1,3 +1,8 @@
+* Remove the Docking Station version.
+inst
+ject "DS wolf control.cos" 1
+slow
+
 new: comp 1 2 202 "wolf" 2 0 9000
 
 pat: fixd 1 "wolf" 1 0 0 0 "WhiteOnTransparentChars"
@@ -10,6 +15,7 @@ setv ov00 0
 * Corpse removal
 setv ov01 0
 tick 1200
+
 
 scrp 1 2 202 73
 	inst
