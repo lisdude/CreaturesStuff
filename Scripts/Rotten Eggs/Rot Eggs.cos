@@ -5,7 +5,7 @@
 * Cause eggs older than 5 hours (customizable via ov00) to rot, contributing some nutrients to the soil.
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2024-06-01
+* Last Modified: 2024-07-01
 ***
 
 new: simp 1 1 41611 "blnk" 0 0 0
@@ -16,6 +16,11 @@ setv ov00 360000
 
 * Run every five minutes
 tick 6000
+
+* Set a game variable indicating this is installed.
+* (this way this script and the egg prioritizer can decide
+*  whether or not to remove the egg constructor)
+setv game "egg_rotter" 1
 
 scrp 1 1 41611 9
 setv va01 ov00
@@ -43,8 +48,11 @@ setv name "laid_time" wtik
 endm
 
 rscr
+delg "egg_rotter"
 enum 1 1 41611
     kill targ
 next
 scrx 1 1 41611 9
-scrx 3 4 0 10
+doif game "egg_prioritizer" eq 0
+    scrx 3 4 0 10
+endi
