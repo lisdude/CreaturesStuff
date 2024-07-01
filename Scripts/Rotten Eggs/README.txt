@@ -22,6 +22,8 @@ v1.1            Set egg laid time immediately after it's created.
                 (Thanks Risen Angel for the suggestions / reports!)
 v1.0            Initial release.
 
+================================================================================================
+
 Sharing, Distribution, Archiving, Etc:
 Feel free to share and archive to your heart's content! All I ask is that you leave this README intact so people know where to find the latest source code.
 
