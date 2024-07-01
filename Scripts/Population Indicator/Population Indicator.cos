@@ -1,6 +1,6 @@
 ***
 * Population Indicator
-* v1.2
+* v1.3
 *
 * Add indicators for creature count and egg count to the favorite places icons.
 *
@@ -8,11 +8,14 @@
 * Last Modified: 2024-06-30
 ***
 
+* TODO: Detect when in fast ticks mode and slow updates.
+
 new: simp 1 1 41613 "blnk" 0 0 0
 attr 16
 
 * Update every second. Nothing can possibly go wrong!
-tick 20
+setv ov00 20
+tick ov00
 
 scrp 1 1 41613 9
     inst
@@ -23,7 +26,7 @@ scrp 1 1 41613 9
     gsub update_indicators
 
     * Restore the tick if world start changed it.
-    tick 40
+    tick ov00
 
 ********************************************************************************************
 
