@@ -1,32 +1,25 @@
 ***
 * Dismiss Life Events
-* v1.0
+* v1.1
 *
 * Dismiss all life events when you right-click on one.
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2024-06-30
+* Last Modified: 2024-07-01
 ***
-
-new: simp 1 1 41615 "blnk" 0 0 0
-attr 16
-
-tick 40
-
-* This is... stupid... but I don't want to modify the life event script.
-* Basically this forces existing life event icons to accept mouse clicks.
-scrp 1 1 41615 9
-enum 1 2 25
-    inst
-    imsk 8
-next
-endm
 
 * - va00: The life event.
 scrp 1 2 25 76
     doif _p1_ eq 2
         * Right-click, time to dismiss everything.
         inst
+
+        * Slap the icon right out of the way!
+        snde "spnk"
+        targ pntr
+    	frat 1
+    	anim [10 11 12 11 10 0]
+
         enum 1 2 25
             doif targ ne null
                 seta va00 targ
@@ -42,9 +35,11 @@ scrp 1 2 25 76
     endi
 endm
 
+* Set the input mask for the life event when it's constructed.
+scrp 1 2 25 10
+    imsk 8
+endm
+
 rscr
-enum 1 1 41615
-    kill targ
-next
-scrx 1 1 41615 9
 scrx 1 2 25 76
+scrx 1 2 25 10

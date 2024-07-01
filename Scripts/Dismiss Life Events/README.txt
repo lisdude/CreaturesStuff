@@ -1,4 +1,4 @@
-Dismiss Life Events v1.0
+Dismiss Life Events v1.1
 ------------------------
 Right-click on any life event to dismiss them all at once.
 
@@ -13,11 +13,17 @@ Existing Worlds or Updating:
 
 ================================================================================================
 
+Changelog:
+v1.1            Remove the need for a timer and make the pointer slap the life event away.
+v1.0            Initial release.
+
+================================================================================================
+
 Sharing, Distribution, Archiving, Etc:
 Feel free to share and archive to your heart's content! All I ask is that you leave this README intact so people know where to find the latest source code.
 
 ================================================================================================
 
 Author:         lisdude@lisdude.com
-Last Modified:  2024-06-30
+Last Modified:  2024-07-01
 Source Code:    https://github.com/lisdude/CreaturesStuff
