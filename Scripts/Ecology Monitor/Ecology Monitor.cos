@@ -1,6 +1,6 @@
 ***
 * Ecology Monitor
-* v1.0
+* v1.1
 *
 * Monitor the ecology and, if necessary, reinject to restore populations to default.
 * NOTE: This script dumps debug messages every time something goes extinct. You may
@@ -9,7 +9,7 @@
 *
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2024-04-05
+* Last Modified: 2024-07-02
 ***
 new: simp 1 1 41606 "blnk" 0 0 0
 attr 16
@@ -17,231 +17,465 @@ attr 16
 * Check every ten minutes.
 tick 12000
 
-
 scrp 1 1 41606 9
 
-***** NORN TERRARIUM *****
-* Ant
-doif totl 2 14 2 le 0
-ject "ant.cos" 7
-dbg: outs "Reinjecting ants..."
+* Make sure C3 actually exists.
+* (hopefully this is a reasonable enough check)
+doif eame "engine_no_auxiliary_bootstrap_1" ne 1 and gmap 1538 3272 ne -1
+    ***** NORN TERRARIUM *****
+    * Ant
+    doif totl 2 14 2 le 0
+    ject "ant.cos" 7
+    dbg: outs "Reinjecting ants..."
+    endi
+
+    * Bee
+    doif totl 2 14 1 le 0
+    ject "bee.cos" 7
+    dbg: outs "Reinjecting bees..."
+    endi
+
+    * Butterflies
+    doif totl 2 13 2 le 1
+    ject "Butterfly.cos" 7
+    dbg: outs "Reinjecting butterflies..."
+    endi
+
+    * Dragonflies
+    doif totl 2 15 8 le 1
+    ject "dragonfly.cos" 7
+    dbg: outs "Reinjecting dragonflies..."
+    endi
+
+    * Grasshoppers
+    doif totl 2 13 6 le 1
+    ject "grasshopper.cos" 7
+    dbg: outs "Reinjecting grasshoppers..."
+    endi
+
+    * Grazer
+    doif totl 2 15 2 le 1
+    ject "grazer2.cos" 7
+    dbg: outs "Reinjecting grazers..."
+    endi
+
+    * Gosh-hawk
+    doif totl 2 16 1 le 0
+    ject "Hawk.cos" 7
+    dbg: outs "Reinjecting hawk..."
+    endi
+
+    * Hedgehog
+    doif totl 2 15 5 le 0
+    ject "hedgehog.cos" 7
+    dbg: outs "Reinjecting hedgehog..."
+    endi
+
+    * Hoppity
+    doif totl 2 15 12 le 0
+    ject "hoppity.cos" 7
+    dbg: outs "Reinjecting hoppity..."
+    endi
+
+    * Hummingbird
+    doif totl 2 17 2 le 2
+    ject "Hummingbird.cos" 7
+    dbg: outs "Reinjecting hummingbird..."
+    endi
+
+    doif totl 2 15 10 le 0
+    ject "kingfisher.cos" 7
+    dbg: outs "Reinjecting kingfisher..."
+    endi
+
+    * Robin
+    doif totl 2 15 1 le 1
+    ject "Robin2.cos" 7
+    dbg: outs "Reinjecting robin..."
+    endi
+
+    * Snail
+    doif totl 2 17 7 le 0
+    ject "snail.cos" 7
+    dbg: outs "Reinjecting snail..."
+    endi
+
+    * Stickletrout
+    doif totl 2 15 9 le 1
+    ject "stickleback.cos" 7
+    dbg: outs "Reinjecting trout..."
+    endi
+
+    * Woodpigeon
+    doif totl 2 15 11 le 2
+    ject "woodpigeon2.cos" 7
+    dbg: outs "Reinjecting pigeons..."
+    endi
+
+    * Blue Flower
+    doif totl 2 4 6 le 0
+    ject "bluebell.cos" 7
+    dbg: outs "Reinjecting blue flower..."
+    endi
+
+    * Carrots
+    doif totl 2 11 1 le 2
+    ject "Carrot.cos" 7
+    dbg: outs "Reinjecting carrots..."
+    endi
+
+    * Foxglove
+    doif totl 2 4 1 le 1
+    ject "PLANT MODEL -foxglove Seed.cos" 7
+    dbg: outs "Reinjecting foxglove..."
+    endi
+
+    * Grass
+    doif totl 2 6 1 le 3
+    ject "grass.cos" 7
+    dbg: outs "Reinjecting grass..."
+    endi
+
+    * Pinky Plant
+    doif totl 2 4 5 le 0
+    ject "starplant.cos" 7
+    dbg: outs "Reinjecting pinky plant..."
+    endi
+
+
+    ********************************************
+
+    ***** DESERT TERRARIUM *****
+    * Cacbana
+    doif totl 2 5 2 le 0
+    ject "cacbana.cos" 7
+    dbg: outs "Reinjecting cacbana..."
+    endi
+
+    * Desert Grass
+    doif totl 2 6 4 le 1
+    ject "desert grass.cos" 7
+    dbg: outs "Reinjecting desert grass..."
+    endi
+
+    * Balloon Bug
+    doif totl 2 13 9 le 0
+    ject "balloon bug.cos" 7
+    dbg: outs "Reinjecting balloon bug..."
+    endi
+
+    * Gnarler
+    doif totl 2 15 22 le 0
+    ject "gnarler.cos" 7
+    dbg: outs "Reinjecting gnarler..."
+    endi
+
+    * Meerk
+    doif totl 2 15 23 le 0
+    ject "meerk.cos" 7
+    dbg: outs "Reinjecting meerk..."
+    endi
+
+    * Uglee
+    doif totl 2 16 8 le 0
+    ject "Uglee.cos" 7
+    dbg: outs "Reinjecting uglee..."
+    endi
+    *********************************************
+
+    ***** JUNGLE TERRARIUM *****
+    * Dragonfly
+    doif totl 2 15 8 le 0
+    ject "dragonfly.cos" 7
+    dbg: outs "Reinjecting dragonfly..."
+    endi
+
+    * Gnat
+    doif totl 2 14 5 le 0
+    ject "gnats.cos" 7
+    dbg: outs "Reinjecting gnats..."
+    endi
+
+    * Kobold
+    doif totl 2 16 7 le 0
+    ject "Kobold.cos" 7
+    dbg: outs "Reinjecting Kobold..."
+    endi
+
+    * Mossie Fly
+    doif totl 2 14 4 le 0
+    ject "mosquito.cos" 7
+    dbg: outs "Reinjecting mossie fly..."
+    endi
+
+    * Piranha
+    doif totl 2 16 3 le 0
+    ject "piranha.cos" 7
+    dbg: outs "Reinjecting piranha..."
+    endi
+
+    * Rhino Beetle
+    doif totl 2 14 3 le 0
+    ject "beetle.cos" 7
+    dbg: outs "Reinjecting rhino beetle..."
+    endi
+
+    * Wasp
+    doif totl 2 14 6 le 0
+    ject "wasp.cos" 7
+    dbg: outs "Reinjecting wasp..."
+    endi
+
+    * Fungi
+    doif totl 2 8 5 le 0
+    ject "fungi.cos" 7
+    dbg: outs "Reinjecting fungi..."
+    endi
+
+    * Purbana
+    doif totl 2 4 4 le 0
+    ject "palmplant.cos" 7
+    dbg: outs "Reinjecting Purbana..."
+    endi
+
+    * Tendril Plant
+    doif totl 2 5 4 le 0
+    ject "tendril.cos" 7
+    dbg: outs "Reinjecting tendril plant..."
+    endi
+    **********************************************
+
+    ***** MARINE TERRARIUM *****
+    * Aquamites
+    doif totl 2 13 8 le 0
+    ject "aquamites.cos" 7
+    dbg: outs "Reinjecting aquamites..."
+    endi
+
+    * Clown Fish
+    doif totl 2 18 15 le 0
+    ject "clown fish.cos" 7
+    dbg: outs "Reinjecting clown fish..."
+    endi
+
+    * Cuttlefish
+    doif totl 2 15 20 le 0
+    ject "cuttlefish.cos" 7
+    dbg: outs "Reinjecting cuttlefish..."
+    endi
+
+    * Handle Fish
+    doif totl 2 18 21 le 0
+    ject "handlefish.cos" 7
+    dbg: outs "Reinjecting handle fish..."
+    endi
+
+    * Nudibranch
+    doif totl 2 15 21 le 0
+    ject "nudibranch.cos" 7
+    dbg: outs "Reinjecting nudibranch..."
+    endi
+
+    * Man-o-War
+    doif totl 2 15 17 le 0
+    ject "man-o-war.cos" 7
+    dbg: outs "Reinjecting man-o-war..."
+    endi
+
+    * Rainbow Sharkling
+    doif totl 2 16 4 le 0
+    ject "rainbow_sharkling.cos" 7
+    dbg: outs "Reinjecting rainbow sharkling..."
+    endi
+
+    * Wyst
+    doif totl 2 15 18 le 1
+    ject "wysts.cos" 7
+    dbg: outs "Reinjecting wysts..."
+    endi
+
+    * Gumin Grass
+    doif totl 2 4 10 le 0
+    ject "gumin grass.cos" 7
+    dbg: outs "Reinjecting gumin grass..."
+    endi
+
+    * Opal Sponge
+    doif totl 2 4 8 le 0
+    ject "opal sponge.cos" 7
+    dbg: outs "Reinjecting opal sponge..."
+    endi
+
+    * Orange Sponge
+    doif totl 2 4 7 le 0
+    ject "orange sponge.cos" 7
+    dbg: outs "Reinjecting orange sponge..."
+    endi
+
+    * Neon Fish
+    doif totl 2 18 17 le 0
+    dbg: outs "Reinjecting neon fish..."
+    * NOTE: These are only available from the egg launcher, so this bit of code is a little longer
+    *       as it creates the actual fish instead of reinjecting.
+    setv va00 0
+    ** Create 10 Adult Fish to start with.
+    reps 2
+    	addv va00 1
+    	doif va00 = 1
+    		setv va40 3879
+    		setv va41 2192
+    	elif va00 = 2
+    		setv va40 5334
+    		setv va41 2292
+    	endi
+    ** Put five in one marine area, and five in the other.
+    	reps 5
+    		addv va60 1
+    		new: simp 2 15 19 "neon" 188 0 4100
+    		attr 199
+    		clac -1
+    		elas 20
+    		aero 1
+    		accg 0
+    		perm 100
+    		mvto va40 va41
+    ** ov01 is life (rises each timer script).
+    		setv ov01 0
+    ** ov02 is energy (lowers each timer script).
+    		setv ov02 750
+    ** ov05 is the life stage. Not set in the install.
+    		seta ov16 null
+    ** ov71 is the species, ov75 is the genus: 13 8 is Aquamites, 3 6 is Orange
+    ** Sponge Seed, 3 7 is Opal Sponge Seed and 3 8 is Gumin Grass seed.
+    ** ov76 is an indicator of which one is currently selected. 1 = aquamites, 2 = orange sponge,
+    ** 3 = opal sponge, 4 = gumin grass.
+    		setv va51 rand 1 4
+    		doif va51 = 1
+    			setv ov75 13
+    			setv ov71 8
+    			setv ov76 1
+    		elif va51 = 2
+    			setv ov75 3
+    			setv ov71 6
+    			setv ov76 2
+    		elif va51 = 3
+    			setv ov75 3
+    			setv ov71 7
+    			setv ov76 3
+    		elif va51 = 4
+    			setv ov75 3
+    			setv ov71 8
+    			setv ov76 4
+    		endi
+    ** End.
+
+    **	Pose Bases.
+    		setv ov30 0
+    		setv ov31 30
+    		setv ov32 10
+    		setv ov33 20
+    		setv ov34 40
+    **    Initial Poses.
+    		setv ov61 50
+    		setv va50 rand 0 1
+    		setv ov73 1
+    		setv ov74 0
+    		doif va50 = 0
+    			setv ov10 -1
+    			pose 0
+    		elif va50 = 1
+    			setv ov10 1
+    			pose 30
+    		endi
+    		velo 0 0
+    		tick 2
+    	repe
+    repe
+    endi
+
+
+    * Angel Fish
+    doif totl 2 15 14 le 0
+    dbg: outs "Reinjecting angel fish..."
+    * NOTE: These are only available from the egg launcher, so this bit of code is a little longer
+    *       as it creates the actual fish instead of reinjecting.
+    setv va00 0
+    ** Create 20 Adult Fish to start with. They die FAST!
+    reps 4
+    	addv va00 1
+    	doif va00 = 1
+    		setv va40 3879
+    		setv va41 2192
+    	elif va00 = 2
+    		setv va40 5334
+    		setv va41 2292
+    	endi
+    ** Put five in one marine area, and five in the other.
+    	reps 5
+    		addv va60 1
+    		new: simp 2 15 14 "angel" 153 0 4100
+    		attr 199
+    		clac -1
+    		elas 20
+    		aero 1
+    		accg 0
+    		perm 100
+    		mvto va40 va41
+    		emit 6 .15
+    ** ov01 is life (rises each timer script).
+    		setv ov01 0
+    ** ov02 is energy (lowers each timer script).
+    		setv ov02 750
+    ** ov05 is the life stage. Not set in the install.
+    		seta ov16 null
+    ** ov71 is the species, ov75 is the genus: 13 8 is Aquamites, 3 6 is Orange
+    ** Sponge Seed, 3 7 is Opal Sponge Seed and 3 8 is Gumin Grass seed.
+    ** ov76 is an indicator of which one is currently selected. 1 = aquamites, 2 = orange sponge,
+    ** 3 = opal sponge, 4 = gumin grass.
+    		setv va51 rand 1 4
+    		doif va51 = 1
+    			setv ov75 13
+    			setv ov71 8
+    			setv ov76 1
+    		elif va51 = 2
+    			setv ov75 3
+    			setv ov71 6
+    			setv ov76 2
+    		elif va51 = 3
+    			setv ov75 3
+    			setv ov71 7
+    			setv ov76 3
+    		elif va51 = 4
+    			setv ov75 3
+    			setv ov71 8
+    			setv ov76 4
+    		endi
+    ** End.
+    **	Pose Bases.
+    		setv ov30 0
+    		setv ov31 10
+    		setv ov32 20
+    		setv ov33 30
+    		setv ov34 41
+    **    Initial Poses.
+    		setv va50 rand 0 1
+    		setv ov61 50
+    		setv ov73 1
+    		setv ov74 0
+    		doif va50 = 0
+    			setv ov10 -1
+    			pose 0
+    		elif va50 = 1
+    			setv ov10 1
+    			pose 30
+    		endi
+    		velo 0 0
+            tick 2
+    	repe
+    repe
+    endi
 endi
 
-* Bee
-doif totl 2 14 1 le 0
-ject "bee.cos" 7
-dbg: outs "Reinjecting bees..."
-endi
-
-* Butterflies
-doif totl 2 13 2 le 1
-ject "Butterfly.cos" 7
-dbg: outs "Reinjecting butterflies..."
-endi
-
-* Dragonflies
-doif totl 2 15 8 le 1
-ject "dragonfly.cos" 7
-dbg: outs "Reinjecting dragonflies..."
-endi
-
-* Grasshoppers
-doif totl 2 13 6 le 1
-ject "grasshopper.cos" 7
-dbg: outs "Reinjecting grasshoppers..."
-endi
-
-* Grazer
-doif totl 2 15 2 le 1
-ject "grazer2.cos" 7
-dbg: outs "Reinjecting grazers..."
-endi
-
-* Gosh-hawk
-doif totl 2 16 1 le 0
-ject "Hawk.cos" 7
-dbg: outs "Reinjecting hawk..."
-endi
-
-* Hedgehog
-doif totl 2 15 5 le 0
-ject "hedgehog.cos" 7
-dbg: outs "Reinjecting hedgehog..."
-endi
-
-* Hoppity
-doif totl 2 15 12 le 0
-ject "hoppity.cos" 7
-dbg: outs "Reinjecting hoppity..."
-endi
-
-* Hummingbird
-doif totl 2 17 2 le 2
-ject "Hummingbird.cos" 7
-dbg: outs "Reinjecting hummingbird..."
-endi
-
-doif totl 2 15 10 le 0
-ject "kingfisher.cos" 7
-dbg: outs "Reinjecting kingfisher..."
-endi
-
-* Robin
-doif totl 2 15 1 le 1
-ject "Robin2.cos" 7
-dbg: outs "Reinjecting robin..."
-endi
-
-* Snail
-doif totl 2 17 7 le 0
-ject "snail.cos" 7
-dbg: outs "Reinjecting snail..."
-endi
-
-* Stickletrout
-doif totl 2 15 9 le 1
-ject "stickleback.cos" 7
-dbg: outs "Reinjecting trout..."
-endi
-
-* Woodpigeon
-doif totl 2 15 11 le 2
-ject "woodpigeon2.cos" 7
-dbg: outs "Reinjecting pigeons..."
-endi
-
-* Blue Flower
-doif totl 2 4 6 le 0
-ject "bluebell.cos" 7
-dbg: outs "Reinjecting blue flower..."
-endi
-
-* Carrots
-doif totl 2 11 1 le 2
-ject "Carrot.cos" 7
-dbg: outs "Reinjecting carrots..."
-endi
-
-* Foxglove
-doif totl 2 4 1 le 1
-ject "PLANT MODEL -foxglove Seed.cos" 7
-dbg: outs "Reinjecting foxglove..."
-endi
-
-* Grass
-doif totl 2 6 1 le 3
-ject "grass.cos" 7
-dbg: outs "Reinjecting grass..."
-endi
-
-* Pinky Plant
-doif totl 2 4 5 le 0
-ject "starplant.cos" 7
-dbg: outs "Reinjecting pinky plant..."
-endi
-
-
-********************************************
-
-***** DESERT TERRARIUM *****
-* Cacbana
-doif totl 2 5 2 le 0
-ject "cacbana.cos" 7
-dbg: outs "Reinjecting cacbana..."
-endi
-
-* Desert Grass
-doif totl 2 6 4 le 1
-ject "desert grass.cos" 7
-dbg: outs "Reinjecting desert grass..."
-endi
-
-* Balloon Bug
-doif totl 2 13 9 le 0
-ject "balloon bug.cos" 7
-dbg: outs "Reinjecting balloon bug..."
-endi
-
-* Gnarler
-doif totl 2 15 22 le 0
-ject "gnarler.cos" 7
-dbg: outs "Reinjecting gnarler..."
-endi
-
-* Meerk
-doif totl 2 15 23 le 0
-ject "meerk.cos" 7
-dbg: outs "Reinjecting meerk..."
-endi
-
-* Uglee
-doif totl 2 16 8 le 0
-ject "Uglee.cos" 7
-dbg: outs "Reinjecting uglee..."
-endi
-*********************************************
-
-***** JUNGLE TERRARIUM *****
-* Dragonfly
-doif totl 2 15 8 le 0
-ject "dragonfly.cos" 7
-dbg: outs "Reinjecting dragonfly..."
-endi
-
-* Gnat
-doif totl 2 14 5 le 0
-ject "gnats.cos" 7
-dbg: outs "Reinjecting gnats..."
-endi
-
-* Kobold
-doif totl 2 16 7 le 0
-ject "Kobold.cos" 7
-dbg: outs "Reinjecting Kobold..."
-endi
-
-* Mossie Fly
-doif totl 2 14 4 le 0
-ject "mosquito.cos" 7
-dbg: outs "Reinjecting mossie fly..."
-endi
-
-* Piranha
-doif totl 2 16 3 le 0
-ject "piranha.cos" 7
-dbg: outs "Reinjecting piranha..."
-endi
-
-* Rhino Beetle
-doif totl 2 14 3 le 0
-ject "beetle.cos" 7
-dbg: outs "Reinjecting rhino beetle..."
-endi
-
-* Wasp
-doif totl 2 14 6 le 0
-ject "wasp.cos" 7
-dbg: outs "Reinjecting wasp..."
-endi
-
-* Fungi
-doif totl 2 8 5 le 0
-ject "fungi.cos" 7
-dbg: outs "Reinjecting fungi..."
-endi
-
-* Purbana
-doif totl 2 4 4 le 0
-ject "palmplant.cos" 7
-dbg: outs "Reinjecting Purbana..."
-endi
-
-* Tendril Plant
-doif totl 2 5 4 le 0
-ject "tendril.cos" 7
-dbg: outs "Reinjecting tendril plant..."
-endi
-**********************************************
 
 ***** NORN MESO *****
 * Carrots
@@ -250,237 +484,6 @@ ject "carrot pod.cos" 7
 dbg: outs "Reinjecting meso carrot pod..."
 endi
 **********************************************
-
-***** MARINE TERRARIUM *****
-* Aquamites
-doif totl 2 13 8 le 0
-ject "aquamites.cos" 7
-dbg: outs "Reinjecting aquamites..."
-endi
-
-* Clown Fish
-doif totl 2 18 15 le 0
-ject "clown fish.cos" 7
-dbg: outs "Reinjecting clown fish..."
-endi
-
-* Cuttlefish
-doif totl 2 15 20 le 0
-ject "cuttlefish.cos" 7
-dbg: outs "Reinjecting cuttlefish..."
-endi
-
-* Handle Fish
-doif totl 2 18 21 le 0
-ject "handlefish.cos" 7
-dbg: outs "Reinjecting handle fish..."
-endi
-
-* Nudibranch
-doif totl 2 15 21 le 0
-ject "nudibranch.cos" 7
-dbg: outs "Reinjecting nudibranch..."
-endi
-
-* Man-o-War
-doif totl 2 15 17 le 0
-ject "man-o-war.cos" 7
-dbg: outs "Reinjecting man-o-war..."
-endi
-
-* Rainbow Sharkling
-doif totl 2 16 4 le 0
-ject "rainbow_sharkling.cos" 7
-dbg: outs "Reinjecting rainbow sharkling..."
-endi
-
-* Wyst
-doif totl 2 15 18 le 1
-ject "wysts.cos" 7
-dbg: outs "Reinjecting wysts..."
-endi
-
-* Gumin Grass
-doif totl 2 4 10 le 0
-ject "gumin grass.cos" 7
-dbg: outs "Reinjecting gumin grass..."
-endi
-
-* Opal Sponge
-doif totl 2 4 8 le 0
-ject "opal sponge.cos" 7
-dbg: outs "Reinjecting opal sponge..."
-endi
-
-* Orange Sponge
-doif totl 2 4 7 le 0
-ject "orange sponge.cos" 7
-dbg: outs "Reinjecting orange sponge..."
-endi
-
-* Neon Fish
-doif totl 2 18 17 le 0
-dbg: outs "Reinjecting neon fish..."
-* NOTE: These are only available from the egg launcher, so this bit of code is a little longer
-*       as it creates the actual fish instead of reinjecting.
-setv va00 0
-** Create 10 Adult Fish to start with.
-reps 2
-	addv va00 1
-	doif va00 = 1
-		setv va40 3879
-		setv va41 2192
-	elif va00 = 2
-		setv va40 5334
-		setv va41 2292
-	endi
-** Put five in one marine area, and five in the other.
-	reps 5
-		addv va60 1
-		new: simp 2 15 19 "neon" 188 0 4100
-		attr 199
-		clac -1
-		elas 20
-		aero 1
-		accg 0
-		perm 100
-		mvto va40 va41
-** ov01 is life (rises each timer script).
-		setv ov01 0
-** ov02 is energy (lowers each timer script).
-		setv ov02 750
-** ov05 is the life stage. Not set in the install.
-		seta ov16 null
-** ov71 is the species, ov75 is the genus: 13 8 is Aquamites, 3 6 is Orange
-** Sponge Seed, 3 7 is Opal Sponge Seed and 3 8 is Gumin Grass seed.
-** ov76 is an indicator of which one is currently selected. 1 = aquamites, 2 = orange sponge,
-** 3 = opal sponge, 4 = gumin grass.
-		setv va51 rand 1 4
-		doif va51 = 1
-			setv ov75 13
-			setv ov71 8
-			setv ov76 1
-		elif va51 = 2
-			setv ov75 3
-			setv ov71 6
-			setv ov76 2
-		elif va51 = 3
-			setv ov75 3
-			setv ov71 7
-			setv ov76 3
-		elif va51 = 4
-			setv ov75 3
-			setv ov71 8
-			setv ov76 4
-		endi
-** End.
-
-**	Pose Bases.
-		setv ov30 0
-		setv ov31 30
-		setv ov32 10
-		setv ov33 20
-		setv ov34 40
-**    Initial Poses.
-		setv ov61 50
-		setv va50 rand 0 1
-		setv ov73 1
-		setv ov74 0
-		doif va50 = 0
-			setv ov10 -1
-			pose 0
-		elif va50 = 1
-			setv ov10 1
-			pose 30
-		endi
-		velo 0 0
-		tick 2
-	repe
-repe
-endi
-
-
-* Angel Fish
-doif totl 2 15 14 le 0
-dbg: outs "Reinjecting angel fish..."
-* NOTE: These are only available from the egg launcher, so this bit of code is a little longer
-*       as it creates the actual fish instead of reinjecting.
-setv va00 0
-** Create 20 Adult Fish to start with. They die FAST!
-reps 4
-	addv va00 1
-	doif va00 = 1
-		setv va40 3879
-		setv va41 2192
-	elif va00 = 2
-		setv va40 5334
-		setv va41 2292
-	endi
-** Put five in one marine area, and five in the other.
-	reps 5
-		addv va60 1
-		new: simp 2 15 14 "angel" 153 0 4100
-		attr 199
-		clac -1
-		elas 20
-		aero 1
-		accg 0
-		perm 100
-		mvto va40 va41
-		emit 6 .15
-** ov01 is life (rises each timer script).
-		setv ov01 0
-** ov02 is energy (lowers each timer script).
-		setv ov02 750
-** ov05 is the life stage. Not set in the install.
-		seta ov16 null
-** ov71 is the species, ov75 is the genus: 13 8 is Aquamites, 3 6 is Orange
-** Sponge Seed, 3 7 is Opal Sponge Seed and 3 8 is Gumin Grass seed.
-** ov76 is an indicator of which one is currently selected. 1 = aquamites, 2 = orange sponge,
-** 3 = opal sponge, 4 = gumin grass.
-		setv va51 rand 1 4
-		doif va51 = 1
-			setv ov75 13
-			setv ov71 8
-			setv ov76 1
-		elif va51 = 2
-			setv ov75 3
-			setv ov71 6
-			setv ov76 2
-		elif va51 = 3
-			setv ov75 3
-			setv ov71 7
-			setv ov76 3
-		elif va51 = 4
-			setv ov75 3
-			setv ov71 8
-			setv ov76 4
-		endi
-** End.
-**	Pose Bases.
-		setv ov30 0
-		setv ov31 10
-		setv ov32 20
-		setv ov33 30
-		setv ov34 41
-**    Initial Poses.
-		setv va50 rand 0 1
-		setv ov61 50
-		setv ov73 1
-		setv ov74 0
-		doif va50 = 0
-			setv ov10 -1
-			pose 0
-		elif va50 = 1
-			setv ov10 1
-			pose 30
-		endi
-		velo 0 0
-        tick 2
-	repe
-repe
-endi
-
 
 endm
 
