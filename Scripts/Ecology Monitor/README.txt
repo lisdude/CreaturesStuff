@@ -1,4 +1,4 @@
-Ecology Monitor v1.1
+Ecology Monitor v1.2
 -----------------------
 Monitor the default ecology and reinject things as they become extinct / endangered.
 
@@ -14,6 +14,7 @@ Existing Worlds or Updating:
 ================================================================================================
 
 Changelog:
+v1.2            Re-apply the Steam patches after re-injecting the stock C3 scripts.
 v1.1            Check if Creatures 3 is loaded before re-injecting anything.
 v1.0            Initial release.
 
@@ -25,5 +26,5 @@ Feel free to share and archive to your heart's content! All I ask is that you le
 ================================================================================================
 
 Author:         lisdude@lisdude.com
-Last Modified:  2024-07-02
+Last Modified:  2024-07-03
 Source Code:    https://github.com/lisdude/CreaturesStuff

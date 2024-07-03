@@ -1,6 +1,6 @@
 ***
 * Ecology Monitor
-* v1.1
+* v1.2
 *
 * Monitor the ecology and, if necessary, reinject to restore populations to default.
 * NOTE: This script dumps debug messages every time something goes extinct. You may
@@ -9,7 +9,7 @@
 *
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2024-07-02
+* Last Modified: 2024-07-03
 ***
 new: simp 1 1 41606 "blnk" 0 0 0
 attr 16
@@ -44,6 +44,7 @@ doif eame "engine_no_auxiliary_bootstrap_1" ne 1 and gmap 1538 3272 ne -1
     * Dragonflies
     doif totl 2 15 8 le 1
     ject "dragonfly.cos" 7
+    ject "dragonfly_patch.cos" 7
     dbg: outs "Reinjecting dragonflies..."
     endi
 
@@ -173,6 +174,7 @@ doif eame "engine_no_auxiliary_bootstrap_1" ne 1 and gmap 1538 3272 ne -1
     * Meerk
     doif totl 2 15 23 le 0
     ject "meerk.cos" 7
+    ject "meerk_fix.cos" 7
     dbg: outs "Reinjecting meerk..."
     endi
 
@@ -192,6 +194,10 @@ doif eame "engine_no_auxiliary_bootstrap_1" ne 1 and gmap 1538 3272 ne -1
 
     * Gnat
     doif totl 2 14 5 le 0
+    * The removal script for gnats doesn't kill the monitor. We will!
+    enum 1 1 128
+        kill targ
+    next
     ject "gnats.cos" 7
     dbg: outs "Reinjecting gnats..."
     endi
@@ -204,8 +210,34 @@ doif eame "engine_no_auxiliary_bootstrap_1" ne 1 and gmap 1538 3272 ne -1
 
     * Mossie Fly
     doif totl 2 14 4 le 0
-    ject "mosquito.cos" 7
-    dbg: outs "Reinjecting mossie fly..."
+    * Reinjecting doesn't work here because C3 has a bug in the monitor script
+    * which checks the population of gnats, not mossie flies, when determining
+    * whether or not to spawn more. Which means the population goes insane.
+    * This is fixed in the Steam version, but we can't re-inject the Steam patch
+    * because it creates water plants. Long story short, we just lay an egg. That
+    * should create about 15 new ones.
+*    ject "mosquito.cos" 7
+		inst
+		setv va00 2312
+		setv va01 1432
+		new: simp 2 18 20 "blnk" 1 0 0
+		doif tmvt va00 va01 <> 1
+			mvsf va00 va01
+		else
+			mvto va00 va01
+		endi
+		attr 16
+		tick 3600
+        slow
+        dbg: outs "Reinjecting mossie fly..."
+    elif totl 2 14 4 gt 100
+    dbg: outs "Trimming mossie fly population..."
+    loop
+        rtar 2 14 4
+        doif targ ne null
+            kill targ
+        endi
+    untl totl 2 14 4 le 100
     endi
 
     * Piranha
@@ -279,6 +311,7 @@ doif eame "engine_no_auxiliary_bootstrap_1" ne 1 and gmap 1538 3272 ne -1
     * Man-o-War
     doif totl 2 15 17 le 0
     ject "man-o-war.cos" 7
+    ject "aquatic_patches.cos" 7
     dbg: outs "Reinjecting man-o-war..."
     endi
 
