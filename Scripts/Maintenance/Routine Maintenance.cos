@@ -1,16 +1,15 @@
 ***
 * Maintenance Script
-* v1.2
+* v1.3
 *
 * Perform routine world maintenance, including:
 *
 * - Clean up unassociated zzzz's. (I'm not sure why they accumulate the way they do.)
 * - Make sure the empathic food vendor isn't producing enormous sums of food.
-* - Limit potions to 5.
 * - Dump eggs out of vehicles.
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2024-06-30
+* Last Modified: 2024-07-06
 ***
 
 new: simp 1 1 41605 "blnk" 0 0 0
@@ -49,12 +48,13 @@ scrp 1 1 41605 9
     untl totl 2 8 6 le 100
 
 * Keep potions to a minimum of 5.
-    loop
-        rtar 2 25 0
-        doif targ ne null
-            kill targ
-        endi
-    untl totl 2 25 0 le 5
+* (disabled because it seems a lot of non-annoying potions are classified as potions)
+*    loop
+*        rtar 2 25 0
+*        doif targ ne null
+*            kill targ
+*        endi
+*    untl totl 2 25 0 le 5
 
 * Dump eggs that are sitting in vehicles.
     enum 3 1 0
