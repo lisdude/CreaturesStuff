@@ -122,3 +122,8 @@ subr metaroom_name
 retn
 
 kill va50
+
+rscr
+enum 1 1 41612
+    kill targ
+next
