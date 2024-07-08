@@ -10,7 +10,7 @@
 * - Most gadgets. Such clutter...
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2024-06-30
+* Last Modified: 2024-07-07
 ***
 
 * DS cameras
@@ -19,9 +19,20 @@ enum 3 8 50
 next
 
 * DS monitors
-enum 3 3 104
-    kill targ
-next
+*enum 3 3 104
+*    kill targ
+*next
+* Just removing them kills the comms room. Instead, move the cameras to space...
+rtar 3 3 104
+setv va00 1
+loop
+    addv va00 1
+    scam targ va00
+    trck null 0 0 2 0
+    setv va01 rand 3211 3945
+    setv va02 rand 9406 9950
+    cmrp va01 va02 0
+untl va00 eq 7
 
 * Portal dispenser
 *enum 3 3 101
@@ -37,6 +48,17 @@ next
 enum 3 3 33
     kill targ
 next
+
+* This will set the C3 monitors to space. However, since they don't break
+* anything like the DS monitors, I prefer to just delete them and use the
+* wasted space for something more interesting.
+*enum 3 3 33
+*    scam targ 1
+*    trck null 0 0 2 0
+*    setv va01 rand 3211 3945
+*    setv va02 rand 9406 9950
+*    cmrp va01 va02 0
+*next
 
 * Output display gadgets
 enum 3 8 26
