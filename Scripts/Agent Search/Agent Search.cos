@@ -1,0 +1,603 @@
+***
+* Agent Search
+* v0.1
+*
+* Add a search bar to the Docking Station agent injector.
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2024-07-08
+***
+
+* SCRIPT LIST
+* 92	Clicked on search box.
+* 123   Window resized. Used to detect when the player changes metarooms.
+* 1000	Hit enter in search box. Searches.
+* 1001	Restore the original agent injector.
+* 1002	Clear search results, camera, and add help text.
+* 1003	Clear the search results ONLY. (Called by 1002.)
+* 1004	Return to the injector screen. (If search is invoked from another tab.)
+* 1005	Replace the help text with search help.
+* 1006	Reset the injector camera.
+* 1007	Display results in the injector screen.
+* 1041	Back or forward button clicked.
+* 1043	Cancel button clicked.
+* 5000	Cleanup. Reset query, number of results, current page, and delete all NAME variables.
+
+**** KNOWN ISSUES ****
+* The forward and back buttons don't have fancy indicators for whether or not they're active.
+* There are no helpful tooltips yet.
+* There's no indication that a search found no results. User might think it's hanging or still searching.
+* The search bar is always visible, regardless of which panel you're actually in. I vaguely wanted to make that
+*   circle to the right of the cancel button into a show / hide button... but I'm also lazy.
+**********************
+
+************************************************************************************
+
+inst
+
+new: comp 1 1 41615 "blnk" 0 0 6000
+attr 16
+
+* Move it below the object injector.
+mvto 6111 8980
+
+* Default text color
+sets ov00 "<tint 70 210 255>"
+
+* Help text
+sets ov01 "   Search Modifiers   \n\n\nc3: Creatures 3 agents.\n\ndesc: Descriptions.\n\nexact: Exact names.\n\n\nExamples:\nball\nexact:auto\nc3:desc:monitors"
+
+* Search query
+sets ov03 ""
+
+* Total number of results
+setv ov04 0
+
+* Current page number
+setv ov05 1
+
+* Search field
+pat: text 1 "injector_search" 0 1 0 0 1000 "GreyOnTransChars"
+* Clear button
+pat: butt 2 "injector_search" 1 1 164 -2 0 [] 1043 1
+
+part 1
+frmt 3 3 0 0 0 0 0
+sets va00 ov00
+adds va00 "Search"
+ptxt va00
+
+********************************************************************************
+
+* Back or forward button clicked.
+scrp 1 1 41615 1041
+	inst
+
+*   A potential issue is that you could be in the middle of a search and then click another panel.
+*   When you return to the agent injector, it will repopulate with default agents. But our custom
+*   back and forward buttons will still be in place. So this uh, solution, is to check the help
+*   text. If it's the default catalogue version, we clean up our search and remove our buttons.
+	rtar 1 2 210
+	part 31
+	sets va00 ptxt
+	targ ownr
+
+	doif va00 eq read "agent injector" 10
+*       Clean up search variables.
+		call 5000 0 0
+*       Clear the search string.
+		part 1
+		ptxt ov00
+*       Remove our version of the back and forward buttons.
+		pat: kill 3
+		pat: kill 4
+*       Pass the message along to the real button.
+*       Variables represent the script number and part number of the buttons.
+		doif _p1_ eq 4
+			setv va00 1042
+			setv va01 27
+		else
+			setv va00 1041
+			setv va01 28
+		endi
+		rtar 1 2 210
+		mesg wrt+ targ va00 va01 0 0
+		stop
+	endi
+
+	doif _p1_ eq 3
+*      Back button
+*      If we have results and are on a page that isn't 1.
+		doif ov04 gt 0 and ov05 gt 1
+			subv ov05 1
+			call 1007 0 0
+		endi
+	elif _p1_ eq 4
+*       Forward button
+		doif ov04 gt 0
+*       Determine the desired page number. (Which is just 1 more than the 'current page'.)
+			setv va00 ov05
+			addv va00 1
+*       Figure out which name variable to use for the first new entry.
+			mulv va00 10
+			subv va00 9
+*       Only advance if the desired first entry is less than the total number of results.
+			doif va00 le ov04
+				addv ov05 1
+				call 1007 0 0
+			endi
+		endi
+	endi
+endm
+
+* Cancel button clicked.
+scrp 1 1 41615 1043
+	inst
+
+*   Return to agent injector screen if not already there.
+	call 1004 0 0
+*   Clear text and highlight boxes.
+	call 1003 0 0
+*   Clear the camera.
+	call 1006 0 0
+*   Delete result variables.
+	call 5000 0 0
+*   Restore the default agent injector.
+	call 1001 0 0
+
+* Return focus to the speech bubbles.
+	targ game "c3_default_focus"
+	doif targ ne null
+		part game "c3_default_focus_part"
+		fcus
+	endi
+endm
+
+* Clicked the search field.
+scrp 1 1 41615 92
+	inst
+
+*   So... this event gets called when you click on the search box AND the buttons. Not ideal.
+*   This mildly stupid check will cancel this event if you clicked beyond width or height of
+*   the search box. e.g. on the cancel button. That way both events don't fire and compete.
+
+*   va00: Theoretical last coordinate of the input box.
+	setv va00 posx
+	addv va00 163
+
+	setv va01 posy
+	addv va01 30
+
+	targ pntr
+
+	doif posx gt va00 or posy gt va01
+		stop
+	endi
+
+	targ ownr
+
+*   Return to agent injector screen if not already there.
+	call 1004 0 0
+
+* Clear the search box. (since clicking will remove any results already there anyway)
+	part 1
+	ptxt ov00
+
+* Blank out the old injector and ready for our results.
+	call 1002 0 0
+
+* Focus on the search box.
+	part 1
+	fcus
+endm
+
+* The actual search.
+* va01: Name of the previous agent.
+* va04: Name of the current agent.
+* va05: Loop controller. 0 = record first result, -1 = loop over
+* va06: The comms screen.
+*
+* va95: How to search: 1 = substring search (default), 2 = actual name
+* va96: Search type: 1 = name, 2 = description
+* va97: Which type of agent to search for (C3 / DS)
+* va98: Length of text in the search box.
+
+* COMMS ROOM OBJECT VARIABLES
+* ov04: The name of the first agent. (So we know when we've looped back to the beginning and enough is enough.)
+
+* avar 3 (ov03 on search agent): The search query.
+scrp 1 1 41615 1000
+	inst
+
+*   Return to agent injector screen if not already there.
+	call 1004 0 0
+
+*   Clean up any old searches.
+	call 5000 0 0
+
+*   Create our back and forward arrows if they don't already exist.
+	doif part 3 eq 0
+		pat: butt 3 "comms" 17 2 18 31 0 [] 1041 1
+		pat: butt 4 "comms" 19 2 311 31 0 [] 1041 2
+	endi
+
+*   Default to Docking Station agents.
+	sets va97 "DSAG"
+
+*   Default to search names.
+	setv va96 1
+
+*   Default to substring search.
+	setv va95 1
+
+*   Extract the search query and length.
+	part 1
+	sets ov03 lowa ptxt
+	setv va98 strl ov03
+
+* Restore the normal injector when the string is blank.
+* (for now blank search will just find everything. It's
+*  actually faster to navigate than the default injector.)
+*	doif avar ownr 3 eq ""
+*		targ ownr
+*		call 1001 0 0
+*		stop
+*	endi
+
+*   Parse any options we may have been given.
+*   va10: Index of ":' in the search string.
+*   va11: Index of last ":" (or beginning of string)
+*   va12: Option string. (e.g. c3 or desc)
+*   va13: Length of option string.
+	setv va11 1
+	setv va10 1
+	loop
+		setv va10 sins ov03 va11 ":"
+
+		doif va10 ne -1
+*          Determine the length of the substring.
+			setv va13 va10
+			subv va13 va11
+
+*           Extract the substring.
+			sets va12 subs ov03 va11 va13
+
+*           Figure out what option it is, if any, and do something.
+			doif va12 eq "c3"
+				sets va97 "AGNT"
+			elif va12 eq "desc"
+				setv va96 2
+			elif va12 eq "exact"
+				setv va95 2
+			endi
+
+*           Set va11 to the next index to search in the string.
+			setv va11 va10
+			addv va11 1
+		endi
+	untl va10 eq -1
+
+*   Trim the search query.
+*   va10: Final length of the substring.
+	doif va11 ne 1
+*   Now get the difference between the length of the search query and the last : index. This is the length of the new substring.
+		setv va10 va98
+		subv va10 va11
+*   Add 1 to the final length because we subtracted 1 earlier to get the 'next index' to search.
+		addv va10 1
+		sets ov03 subs ov03 va11 va10
+		setv va98 strl ov03
+	endi
+
+* Target the comms screen.
+	rtar 1 2 210
+	seta va06 targ
+	targ ownr
+
+*** Populate the injector with search results.
+*   va10: True if a result has been found successfully.
+*   va11: String to search.
+
+* We start our search nowhere.
+	sets va01 ""
+
+	setv ov04 0
+	setv va05 0
+	setv va10 0
+
+	loop
+		sets va04 pray next va97 va01
+
+*       Set the 'first agent' variable so we know when we've looped around.
+		doif va05 eq 0
+*           Set ov04 on the comms screen:
+			sets avar va06 4 va04
+			setv va05 1
+*       Check comms screen ov04
+		elif va04 eq avar va06 4
+*           We've looped back around to the first agent. Done.
+			setv va05 -1
+		endi
+
+		doif va05 ne -1
+*           Determine what to search. (name or description)
+			doif va96 eq 2
+				sets va11 pray agts va04 "Agent Description" ""
+			else
+				sets va11 va04
+			endi
+
+*           Lowercase for easy searching.
+			sets va11 lowa va11
+
+			doif va95 eq 1
+*               Substring search:
+				doif sins va11 1 avar ownr 3 ne -1
+					setv va10 1
+				endi
+			elif va95 eq 2
+*           Exact name search:
+				doif strl va11 ge va98
+					doif subs va11 1 va98 eq avar ownr 3
+						setv va10 1
+					endi
+				endi
+			endi
+
+*       Match found. Add it to an appropriate slot.
+			doif va10 eq 1
+				addv ov04 1
+*           Add agent name to name variable corresponding to its match number.
+				sets name ov04 va04
+*           Reset 'did it match' variable.
+				setv va10 0
+			endi
+		endi
+
+*   Set previous agent.
+		sets va01 va04
+
+	untl va05 eq -1
+
+* Now display results.
+	call 1007 0 0
+
+endm
+
+* Reset everything to the default agent injector screen.
+scrp 1 1 41615 1001
+	inst
+	part 1
+	ptxt ov00
+*       Remove our version of the back and forward buttons.
+	pat: kill 3
+	pat: kill 4
+
+*   Comm center 1045 populates the default injector view.
+	rtar 1 2 210
+	mesg wrt+ targ 1045 1 0 0
+endm
+
+* Reset to a clear search screen with help box.
+scrp 1 1 41615 1002
+	inst
+* Target the comms screen.
+	rtar 1 2 210
+	seta va14 targ
+
+*** Reset the agent injector.
+*   Clear arrows
+	part 27
+	anim [0]
+	part 28
+	anim [0]
+*	Set current page number
+	setv ov03 1
+*   No current entry.
+	setv va03 0
+*   Clear comms center agent names
+	setv va00 10
+	loop
+		sets avar targ va00 ""
+		addv va00 1
+	untl va00 eq 20
+
+*   Clear highlight boxes and camera.
+	call 1003 0 0
+*   Reset camera
+	call 1006 0 0
+*   Restore the help text.
+	call 1005 0 0
+endm
+
+* Clears the search results.
+scrp 1 1 41615 1003
+	inst
+* Target the comms screen.
+	rtar 1 2 210
+	seta va14 targ
+
+*   Clear text boxes
+	setv va00 7
+	loop
+		part va00
+		ptxt ""
+		addv va00 1
+	untl va00 eq 17
+
+*   Clear highlights.
+	setv va00 17
+	loop
+		part va00
+		pose 0
+		addv va00 1
+	untl va00 eq 27
+endm
+
+*   Return to the injector screen if you try to search and aren't already there.
+scrp 1 1 41615 1004
+	inst
+	rtar 1 2 210
+	doif _p1_ eq 1 or ov00 ne 3 and ov00 ne 4
+*       1004 is the DS agent injector button
+		mesg writ targ 1004
+*       Wait for the previous script to finish.
+		wait 1
+	endi
+endm
+
+* Replace the help text.
+scrp 1 1 41615 1005
+	inst
+*   Target our old friend the comm center.
+	rtar 1 2 210
+*   Clear the description box.
+	part 31
+	ptxt avar ownr 1
+	part 33
+	pose 1
+endm
+
+* Reset the object injector camera.
+scrp 1 1 41615 1006
+	inst
+*	Kill the dummy agents inside the preview.
+	enum 3 3 66
+		kill targ
+	next
+
+* Restore the default space view.
+	rtar 3 3 104
+	doif targ ne null
+		mesg writ targ 1010
+		mesg writ targ 1011
+	endi
+endm
+
+* Cleanup. Reset the relevant object variables and delete NAME variables.
+*  va01: The current name variable.
+*  va03: Loop control. CAOS seems to parse both sides of AND, so you can't use it when the second condition relies on the first being true. Sigh.
+*  va04: The previous name variable.
+scrp 1 1 41615 5000
+	inst
+*   Query
+	sets ov03 ""
+*   Number of results.
+	setv ov04 0
+*   Current page.
+	setv ov05 1
+
+*   Name variables.
+	sets va01 ""
+	sets va04 ""
+	setv va03 1
+	loop
+* Set the previous name variable.
+		doif type va01 eq 2
+			sets va04 va01
+		else
+*           Shouldn't happen, but just in case...
+			setv va04 va01
+		endi
+
+		namn va01
+
+*   If we got back an empty string, there are no more name variables and we signal the loop to end.
+		doif type va01 eq 2
+			doif va01 eq ""
+				setv va03 0
+			endi
+		else
+			deln va01
+* We'll need to pass the previous variable back to NAMN to get the correct next one.
+			doif type va04 eq 2
+				sets va01 va04
+			else
+				setv va01 va04
+			endi
+		endi
+	untl va03 eq 0
+endm
+
+* Display results.
+*   va00: The avar target for the agent name.
+*   va01: The starting point in the name variables.
+*   va02: The loop cutoff point. (10 if a full page of results, less if not)
+*   va03: The part number to display the name in. (Derived from va02)
+*   va04: The agent name.
+*   va05: The current slot in the results display.
+*   va10: Comms screen
+scrp 1 1 41615 1007
+	inst
+*   Clear old text and highlight boxes.
+	call 1003 0 0
+
+	rtar 1 2 210
+	seta va10 targ
+	targ ownr
+
+	setv va00 10
+	setv va05 0
+*   Determine where in our results list to start.
+*   (this seems kinda dumb. Revisit this with some sleep.)
+	setv va01 ov05
+	mulv va01 10
+	subv va01 9
+*   Results counter.
+	setv va02 10
+	loop
+		targ ownr
+*           Set agent name
+		doif type name va01 eq 2
+			sets va04 name va01
+			addv va01 1
+			targ va10
+*           Add the agent name to the correct slot variable.
+			sets avar targ va00 va04
+*           Set the name in the correct text slot.
+			setv va03 va05
+			addv va03 7
+			part va03
+			ptxt avar targ va00
+			addv va05 1
+*           Increment the next avar slot.
+			addv va00 1
+*           Decrease current loop
+			subv va02 1
+		else
+			setv va02 0
+		endi
+	untl va02 le 0
+endm
+
+* Window resize. This is a vaguely stupid way to give focus back to the speech bubbles when the room changes.
+* One flaw, for example, is if the user switches to the learning room, which is the same size and doesn't trigger this event...
+scrp 1 1 41615 123
+* Check if the user has left the room...
+	doif meta ne gmap posx posy
+*   Restore focus to the speech bubbles.
+		targ game "c3_default_focus"
+		doif targ ne null
+			part game "c3_default_focus_part"
+			fcus
+		endi
+	endi
+endm
+
+rscr
+enum 1 1 41615
+	kill targ
+next
+scrx 1 1 41615 92
+scrx 1 1 41615 123
+scrx 1 1 41615 1000
+scrx 1 1 41615 1001
+scrx 1 1 41615 1002
+scrx 1 1 41615 1003
+scrx 1 1 41615 1004
+scrx 1 1 41615 1005
+scrx 1 1 41615 1006
+scrx 1 1 41615 1007
+scrx 1 1 41615 1041
+scrx 1 1 41615 1043
+scrx 1 1 41615 5000
