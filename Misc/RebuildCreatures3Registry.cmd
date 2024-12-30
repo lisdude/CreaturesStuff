@@ -2,13 +2,12 @@
 setlocal
 
 :: This batch file will delete existing Creatures 3 / Docking Station registry keys and replace them with a minimum set necessary to launch the game.
-:: NOTE: This was created and used only in a Windows XP environment. You may find it necessary to make changes for Windows 10 or above, specifically to the installdir.
 
 :: ----- CONFIGURATION -----
 :: This is where your Docking Station is installed.
-SET dsinstalldir=C:\Program Files\Docking Station
+SET dsinstalldir=C:\Program Files (x86)\Steam\steamapps\common\Creatures Docking Station\Docking Station
 :: This is where your Creatures 3 is installed.
-SET c3installdir=C:\Program Files\Creatures 3
+SET c3installdir=C:\Program Files (x86)\Steam\steamapps\common\Creatures Docking Station\Creatures 3
 :: The company name mildly tricky. The default here is for Steam, which uses build 286. If you're using build 296, use 'Gameware Development'
 SET company=CyberLife Technology
 :: -------------------------
