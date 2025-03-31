@@ -1,0 +1,39 @@
+***
+* Unpower the Shee Starship
+* v1.0
+*
+* The opposite of the Docking Station 'Power to the Shee Starship' cos file.
+*
+* Powers down the machines, restores power-ups, makes Ettins and Grendels unselectable, and makes creatures unpickupable.
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2025-03-31
+***
+
+doif eame "engine_no_auxiliary_bootstrap_1" = 0
+* Don't select Ettins and Grendels.
+    setv game "Grettin" 0
+
+* Don't pick up creatures, only hold hands.
+    setv game "engine_creature_pickup_status" 1
+
+* Delete the agent that maxes out bioenergy and update game variables.
+    enum 1 1 195
+        kill targ
+        rgam
+    next
+
+* Restore the power-ups.
+    ject "pick-ups.cos" 7
+
+* Power down the machines.
+	enum 1 1 91
+* ov00 is the machine number. 1-4 are the only ones that need default powered down.
+        doif ov00 <= 4
+* ov02 is the power level.
+    	    setv ov02 0
+* Update the power meter.
+    		mesg writ targ 1002
+    	endi
+    next
+endi
