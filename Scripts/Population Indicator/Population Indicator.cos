@@ -1,11 +1,11 @@
 ***
 * Population Indicator
-* v1.3
+* v1.5
 *
 * Add indicators for creature count and egg count to the favorite places icons.
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2024-06-30
+* Last Modified: 2025-11-04
 ***
 
 * TODO: Detect when in fast ticks mode and slow updates.
@@ -118,7 +118,7 @@ enum 1 4 0
         targ va00
         seta name "population_counter" va01
         targ va01
-        pat: fixd 1 "blank" 0 0 0 10000 "whiteontransparentchars"
+        pat: fixd 1 "blank" 0 0 0 8899 "whiteontransparentchars"
         * Float relative to the favorite place icon.
         frel va00
         * Adjust down from the icon.
@@ -126,7 +126,7 @@ enum 1 4 0
         part 1
         frmt 6 7 0 0 0 0 0
         ptxt "0"
-        pat: fixd 2 "blank" 0 0 0 10000 "whiteontransparentchars"
+        pat: fixd 2 "blank" 0 0 0 8899 "whiteontransparentchars"
         part 2
         frmt 6 7 57 0 0 0 1
         ptxt "0"
@@ -178,12 +178,14 @@ endm
 * The associations between the text and the favorite places icons seems to get weird
 * after reloading. So redo it. sigh.
 scrp 1 1 41613 128
+inst
 enum 1 4 0
     doif type name "population_counter" eq 5
         kill name "population_counter"
         deln "population_counter"
     endi
 next
+slow
 tick 1
 endm
 

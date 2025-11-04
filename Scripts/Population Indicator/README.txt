@@ -1,4 +1,4 @@
-Population Indicator v1.3
+Population Indicator v1.5
 -------------------------
 Add indicators for creature count and egg count to the favorite places icons.
 
@@ -19,6 +19,8 @@ Feel free to share and archive to your heart's content! All I ask is that you le
 ================================================================================================
 
 Changelog:
+v1.5            Fix the plane so that the labels don't overlap the panels.
+v1.4            Fix errors when loading an existing world.
 v1.3            Fix 'make it faster' after loading a world.
 v1.2            Make it faster.
 v1.1            Fix an issue where the text would float... strangely... after reloading the world.
@@ -27,5 +29,5 @@ v1.0            Initial release.
 ================================================================================================
 
 Author:         lisdude@lisdude.com
-Last Modified:  2024-06-30
+Last Modified:  2025-11-04
 Source Code:    https://github.com/lisdude/CreaturesStuff
