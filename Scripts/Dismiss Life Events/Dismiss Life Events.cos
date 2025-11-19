@@ -1,43 +1,59 @@
 ***
 * Dismiss Life Events
-* v1.1
+* v1.2
 *
 * Dismiss all life events when you right-click on one.
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2024-07-01
+* Last Modified: 2025-11-18
 ***
 
-* - va00: The life event.
 scrp 1 2 25 76
-    doif _p1_ eq 2
-        * Right-click, time to dismiss everything.
-        inst
+* Inst so the click events don't clobber each other.
+	inst
 
-        * Slap the icon right out of the way!
-        snde "spnk"
-        targ pntr
-    	frat 1
-    	anim [10 11 12 11 10 0]
+	doif _p1_ eq 2
+		doif hots ne null
+			targ hots
+* Check if the 'delete yourself' flag is already set.
+* If this is the case, we know this is a normal click event propogation
+* and we don't need to set any more flags.
+			doif name "delete_self" ne 1
+* Check if the target under the cursor is a life event notification.
+				doif fmly eq 1 and gnus eq 2 and spcs eq 25
+* Slap the icon right out of the way!
+					snde "spnk"
+					targ pntr
+					frat 1
+					anim [10 11 12 11 10 0]
 
-        enum 1 2 25
-            doif targ ne null
-                seta va00 targ
-            	doif ov03 eq 7
-            		doif ov00 ne null
-			            targ ov00
-            			setv ov81 1
-                    endi
-                endi
-                kill va00
-            endi
-        next
-    endi
+* Now flag every life event notification to delete itself when the click event propogates back to it.
+					enum 1 2 25
+						doif targ ne null
+							setv name "delete_self" 1
+						endi
+					next
+				endi
+			endi
+		endi
+	endi
+
+* Check if our 'delete yourself' flag is set. If so... delete yourself.
+	targ ownr
+	doif name "delete_self" eq 1
+		doif ov03 eq 7
+			doif ov00 ne null
+				targ ov00
+				setv ov81 1
+			endi
+		endi
+		kill ownr
+	endi
 endm
 
 * Set the input mask for the life event when it's constructed.
 scrp 1 2 25 10
-    imsk 8
+	imsk 8
 endm
 
 rscr
