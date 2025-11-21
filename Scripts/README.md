@@ -13,4 +13,5 @@ This is a collection of scripts and agents I've written for various purposes.
 - **Population Indicator**: Add indicators to the favorite places icons for number of creatures and number of eggs in the room.
 - **Dismiss Life Events**: Dismiss all life events when you right-click on one.
 - **Agent Search**: Add a search bar to the Docking Station agent injector.
+- **UI Hider**: Hides the favorite places icons, warp notifications, and life event notifcations with a keyboard shortcut.
 - **Misc**: Miscellaneous scripts that are probably useless.

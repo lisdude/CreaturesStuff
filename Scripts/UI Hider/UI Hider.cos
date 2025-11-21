@@ -1,0 +1,73 @@
+***
+* Hide Favicons
+* v1.0
+*
+* Hides favorite places, warp icons, and life events using CTRL-SHIFT-0
+*
+* This is intended to be a temporary measure to allow you to click behind things.
+* As such, if a new life event or notification comes in, it will not be hidden.
+* If you really want to keep them hidden, you can enable the timer by changing
+* tick 0 to tick 20 below.
+*
+* Author: lisdude@lisdude.com
+* Last Modified: 2025-11-21
+***
+
+new: simp 1 2 41617 "blnk" 0 0 0
+attr 16
+imsk 1
+setv ov00 0
+* Number of warp events
+setv ov01 0
+* Number of life events
+setv ov02 0
+
+* Hide new events.
+* To enable, change 0 to 20.
+tick 0
+
+scrp 1 2 41617 73
+	inst
+	doif _p1_ = '0'
+		doif keyd 17 = 1 and keyd 16 = 1
+            doif ov00 eq 1
+                * Show
+                enum 1 4 0 clac 0 show 1 plne 8505 next
+                enum 1 2 46 clac 0 show 1 plne 8505 next
+                enum 1 2 25 clac 1000 show 1 plne 9000 next
+                setv ov00 0
+            else
+                * Hide
+                enum 1 4 0 clac -1 show 0 plne -1 next
+                enum 1 2 46 clac -1 show 0 plne -1 next
+                enum 1 2 25 clac -1 show 0 plne -1 next
+                setv ov00 1
+                setv ov01 totl 1 2 46
+                setv ov02 totl 1 2 25
+            endi
+        endi
+    endi
+endm
+
+scrp 1 2 41617 9
+doif ov00 eq 1
+    * Store the total so we don't have to run totl twice.
+    setv va00 totl 1 2 46
+    doif va00 ne ov01
+        enum 1 2 46 clac -1 show 0 plne -1 next
+        setv ov01 va00
+    endi
+    setv va00 totl 1 2 25
+    doif va00 ne ov02
+        enum 1 2 25 clac -1 show 0 plne -1 next
+        setv ov02 va00
+    endi
+endi
+endm
+
+rscr
+enum 1 2 41617
+    kill targ
+next
+scrx 1 2 41617 73
+scrx 1 2 41617 9
