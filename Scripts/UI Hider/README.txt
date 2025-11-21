@@ -1,6 +1,6 @@
 Top UI Hider v1.0
 ------------------------
-Hides favorite places icons, warp notifications, and life events when you hit CTRL-SHIFT-0.
+Hides favorite places icons, warp notifications, and life events when you hit CTRL-SHIFT-]
 
 Hit the same key to bring them back.
 

@@ -2,7 +2,7 @@
 * Hide Favicons
 * v1.0
 *
-* Hides favorite places, warp icons, and life events using CTRL-SHIFT-0
+* Hides favorite places, warp icons, and life events using CTRL-SHIFT-]
 *
 * This is intended to be a temporary measure to allow you to click behind things.
 * As such, if a new life event or notification comes in, it will not be hidden.
@@ -28,7 +28,7 @@ tick 0
 
 scrp 1 2 41617 73
 	inst
-	doif _p1_ = '0'
+	doif _p1_ = ']'
 		doif keyd 17 = 1 and keyd 16 = 1
             doif ov00 eq 1
                 * Show
