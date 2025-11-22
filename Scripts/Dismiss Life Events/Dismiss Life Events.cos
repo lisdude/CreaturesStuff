@@ -1,17 +1,54 @@
 ***
 * Dismiss Life Events
-* v1.2
+* v1.3
 *
-* Dismiss all life events when you right-click on one.
+* Dismiss all life events when you right-click on any single one.
+* Similarly, dismiss all warp events when you click on a single one.
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2025-11-18
+* Last Modified: 2025-11-21
 ***
 
-scrp 1 2 25 76
-* Inst so the click events don't clobber each other.
-	inst
+new: simp 1 2 41618 "blnk" 0 0 0
+attr 16
 
+* Make sure existing events are right clickable.
+enum 1 2 25
+	imsk 8
+next
+
+enum 1 2 46
+	imsk 8
+next
+
+*** Life events
+scrp 1 2 25 76
+	rtar 1 2 41618
+	mesg wrt+ targ 1000 _p1_ 25 0
+	mesg wrt+ targ 1001 ownr 25 0
+endm
+
+*** Docking Station events
+scrp 1 2 46 76
+	rtar 1 2 41618
+	mesg wrt+ targ 1000 _p1_ 46 0
+	mesg wrt+ targ 1001 ownr 46 0
+endm
+
+* Set the input mask for the life event / DS event when it's constructed.
+scrp 1 2 25 10
+	imsk 8
+endm
+
+scrp 1 2 46 10
+	imsk 8
+endm
+
+
+* Set flags
+scrp 1 2 41618 1000
+	inst
+	setv va02 _p2_
 	doif _p1_ eq 2
 		doif hots ne null
 			targ hots
@@ -20,15 +57,15 @@ scrp 1 2 25 76
 * and we don't need to set any more flags.
 			doif name "delete_self" ne 1
 * Check if the target under the cursor is a life event notification.
-				doif fmly eq 1 and gnus eq 2 and spcs eq 25
+				doif fmly eq 1 and gnus eq 2 and spcs eq va02
 * Slap the icon right out of the way!
 					snde "spnk"
 					targ pntr
 					frat 1
 					anim [10 11 12 11 10 0]
 
-* Now flag every life event notification to delete itself when the click event propogates back to it.
-					enum 1 2 25
+* Now flag every notification to delete itself when the click event propogates back to it.
+					enum 1 2 va02
 						doif targ ne null
 							setv name "delete_self" 1
 						endi
@@ -37,25 +74,41 @@ scrp 1 2 25 76
 			endi
 		endi
 	endi
+endm
 
+* Maybe delete yourself
+scrp 1 2 41618 1001
+	inst
 * Check if our 'delete yourself' flag is set. If so... delete yourself.
-	targ ownr
+	setv va00 _p2_
+	seta va01 _p1_
+	targ _p1_
 	doif name "delete_self" eq 1
-		doif ov03 eq 7
-			doif ov00 ne null
-				targ ov00
-				setv ov81 1
-			endi
+		doif va00 eq 25 and type ov03 ne 0
+			dbg: outs "WARNING: ov03 is NOT an integer! Type:"
+			dbg: outv type ov03
 		endi
-		kill ownr
+		doif va00 eq 25 and type ov03 eq 0
+			doif ov03 eq 7
+				doif ov00 ne null
+					targ ov00
+					setv ov81 1
+				endi
+			endi
+		elif va00 eq 46
+			subv game "ds_warnings" 1
+		endi
+		kill va01
 	endi
 endm
 
-* Set the input mask for the life event when it's constructed.
-scrp 1 2 25 10
-	imsk 8
-endm
-
 rscr
+enum 1 2 41618
+	kill targ
+next
 scrx 1 2 25 76
 scrx 1 2 25 10
+scrx 1 2 46 76
+scrx 1 2 46 10
+scrx 1 2 41618 1000
+scrx 1 2 41618 1001

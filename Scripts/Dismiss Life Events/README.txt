@@ -1,6 +1,7 @@
-Dismiss Life Events v1.2
+Dismiss Life Events v1.3
 ------------------------
 Right-click on any life event to dismiss them all at once.
+Similarly, right-click on any warp event to dismiss them all at once.
 
 ================================================================================================
 
@@ -14,6 +15,7 @@ Existing Worlds or Updating:
 ================================================================================================
 
 Changelog:
+v1.3            You can now right-click on warp notifications to dismiss them all.
 v1.2            Fix an issue where right-clicking ANYWHERE would dismiss the life events.
 v1.1            Remove the need for a timer and make the pointer slap the life event away.
 v1.0            Initial release.
@@ -26,5 +28,5 @@ Feel free to share and archive to your heart's content! All I ask is that you le
 ================================================================================================
 
 Author:         lisdude@lisdude.com
-Last Modified:  2025-11-18
+Last Modified:  2025-11-21
 Source Code:    https://github.com/lisdude/CreaturesStuff
