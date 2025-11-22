@@ -1,4 +1,4 @@
-Top UI Hider v1.0
+Top UI Hider v1.1
 ------------------------
 Hides favorite places icons, warp notifications, and life events when you hit CTRL-SHIFT-]
 
@@ -22,6 +22,7 @@ Existing Worlds or Updating:
 ================================================================================================
 
 Changelog:
+v1.1            Save and restore the actual values for clac and plne, just in case.
 v1.0            Initial release.
 
 ================================================================================================

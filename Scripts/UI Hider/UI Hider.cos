@@ -1,6 +1,6 @@
 ***
-* Hide Favicons
-* v1.0
+* Top UI Hider
+* v1.1
 *
 * Hides favorite places, warp icons, and life events using CTRL-SHIFT-]
 *
@@ -16,58 +16,171 @@
 new: simp 1 2 41617 "blnk" 0 0 0
 attr 16
 imsk 1
-setv ov00 0
-* Number of warp events
-setv ov01 0
-* Number of life events
-setv ov02 0
 
 * Hide new events.
 * To enable, change 0 to 20.
 tick 0
 
+* Current status: 0 = shown, 1 = hidden
+setv ov00 0
+* Number of warp events
+setv ov01 0
+* Number of life events
+setv ov02 0
+* Original clac values (assumption is that all share the same value)
+* (values set here are defaults from DS just in case somebody is running
+*  v1.0 and tries to unhide. We don't want them to get the wrong values.)
+setv ov03 0
+setv ov04 0
+setv ov05 1000
+* Original plane (same assumption)
+setv ov06 8505
+setv ov07 8505
+setv ov08 9000
+
+
 scrp 1 2 41617 73
 	inst
 	doif _p1_ = ']'
 		doif keyd 17 = 1 and keyd 16 = 1
-            doif ov00 eq 1
-                * Show
-                enum 1 4 0 clac 0 show 1 plne 8505 next
-                enum 1 2 46 clac 0 show 1 plne 8505 next
-                enum 1 2 25 clac 1000 show 1 plne 9000 next
-                setv ov00 0
-            else
-                * Hide
-                enum 1 4 0 clac -1 show 0 plne -1 next
-                enum 1 2 46 clac -1 show 0 plne -1 next
-                enum 1 2 25 clac -1 show 0 plne -1 next
-                setv ov00 1
-                setv ov01 totl 1 2 46
-                setv ov02 totl 1 2 25
-            endi
-        endi
-    endi
+			call 1000 0 0
+		endi
+	endi
 endm
 
 scrp 1 2 41617 9
-doif ov00 eq 1
-    * Store the total so we don't have to run totl twice.
-    setv va00 totl 1 2 46
-    doif va00 ne ov01
-        enum 1 2 46 clac -1 show 0 plne -1 next
-        setv ov01 va00
-    endi
-    setv va00 totl 1 2 25
-    doif va00 ne ov02
-        enum 1 2 25 clac -1 show 0 plne -1 next
-        setv ov02 va00
-    endi
-endi
+	doif ov00 eq 1
+* Store the total so we don't have to run totl twice.
+		setv va00 totl 1 2 46
+		doif va00 ne ov01
+			setv ov01 va00
+			call 1000 2 -1
+		endi
+		setv va00 totl 1 2 25
+		doif va00 ne ov02
+			setv ov02 va00
+			call 1000 3 -1
+		endi
+	endi
+endm
+
+* _p1_:
+*  0 - Affect everything.
+*  1 - Only affect favorite places.
+*  2 - Only affect warp notifications.
+*  3 - Only affect life events.
+* _p2_:
+* -1 - Don't save clac and plne values.
+scrp 1 2 41617 1000
+	targ ownr
+* Copy object variables to local variables for targ shenanigans.
+	setv va13 ov03
+	setv va14 ov04
+	setv va15 ov05
+	setv va16 ov06
+	setv va17 ov07
+	setv va18 ov08
+    setv va21 _p1_
+    setv va22 _p2_
+	doif ov00 eq 1 and va22 ne -1
+
+* Show
+		doif va21 eq 0 or va21 eq 1
+			enum 1 4 0
+				clac va13
+				show 1
+				plne va16
+			next
+		endi
+
+		doif va21 eq 0 or va21 eq 2
+			enum 1 2 46
+				clac va14
+				show 1
+				plne va17
+			next
+		endi
+
+		doif va21 eq 0 or va21 eq 3
+			enum 1 2 25
+				clac va15
+				show 1
+				plne va18
+			next
+		endi
+
+		targ ownr
+		setv ov00 0
+	else
+* Hide
+		doif va21 eq 0 or va21 eq 1
+			rtar 1 4 0
+			doif targ ne null
+doif va22 ne -1
+				setv va00 clac
+				setv va01 plne
+				targ ownr
+				setv ov03 va00
+				setv ov06 va01
+            endi
+
+				enum 1 4 0
+					clac -1
+					show 0
+					plne -1
+				next
+			endi
+		endi
+
+		doif va21 eq 0 or va21 eq 2
+			rtar 1 2 46
+			doif targ ne null
+doif va22 ne -1
+				setv va00 clac
+				setv va01 plne
+				targ ownr
+				setv ov04 va00
+				setv ov07 va01
+            endi
+				setv ov01 totl 1 2 46
+
+				enum 1 2 46
+					clac -1
+					show 0
+					plne -1
+				next
+			endi
+		endi
+
+		doif va21 eq 0 or va21 eq 3
+			rtar 1 2 25
+			doif targ ne null
+doif va22 ne -1
+				setv va00 clac
+				setv va01 plne
+				targ ownr
+				setv ov05 va00
+				setv ov08 va01
+            endi
+				setv ov02 totl 1 2 25
+
+				enum 1 2 25
+					clac -1
+					show 0
+					plne -1
+				next
+			endi
+		endi
+
+		targ ownr
+		setv ov00 1
+	endi
 endm
 
 rscr
 enum 1 2 41617
-    kill targ
+	kill targ
 next
 scrx 1 2 41617 73
 scrx 1 2 41617 9
+scrx 1 2 41617 1000
