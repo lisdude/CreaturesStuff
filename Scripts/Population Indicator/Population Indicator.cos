@@ -1,11 +1,12 @@
 ***
 * Population Indicator
-* v1.5
+* v1.6
 *
 * Add indicators for creature count and egg count to the favorite places icons.
 *
+*
 * Author: lisdude@lisdude.com
-* Last Modified: 2025-11-04
+* Last Modified: 2025-12-07
 ***
 
 * TODO: Detect when in fast ticks mode and slow updates.
@@ -36,16 +37,24 @@ scrp 1 1 41613 9
 * - va02: The creature count.
 * - va03: The egg count.
 * - va04: The text thingy.
+* - va05: The name variable of the metaroom.
 subr update_indicators
 enum 1 4 0
     doif type name "population_counter" eq 5 and name "population_counter" ne null
         seta va04 name "population_counter"
         seta va00 targ
         setv va01 ov01
+        setv va05 va01
+* Special snowflake check for engineering room
+* (We ensure the known coordinates match the metaroom to be
+*  reasonably sure that this is the C3 ship and not another room.)
+        doif gmap 4133 3400 eq va01 and spcs eq 5
+            mulv va05 -1
+        endi
         targ ownr
-        setv va02 name va01
-        mulv va01 1.0
-        setv va03 name va01
+        setv va02 name va05
+        mulv va05 1.0
+        setv va03 name va05
         targ va04
         part 1
         doif stoi ptxt ne va02
@@ -59,6 +68,27 @@ enum 1 4 0
 next
 retn
 
+* Return the metaroom ID for targ
+*   - va00: The metaroom
+subr get_metaroom
+setv va00 gmap posx posy
+* The bridge and engineering rooms are special snowflakes.
+* Here we determine if the metaroom is engineering and,
+* if so, give it a shiny new negative ID so it can track
+* independent of the bridge.
+*
+* First, pick a set of known coordinates and make sure they're the same metaroom.
+doif gmap 4133 3400 eq va00
+    * This should confirm that: 1. This is C3. 2. The metaroom is the bridge.
+    * NOTE: Since the metaroom icon relies on cameras and resolution assumptions and is inconsistent,
+    *       I'm considering engineering to start between the desert and marine terrariums.
+    doif posx ge 4300
+        * Engineering
+        mulv va00 -1
+    endi
+endi
+retn
+
 * Determine how populated each metaroom is.
 *  va00: Metaroom ID of current creature.
 *  va01: Current value of the metaroom name variable.
@@ -67,7 +97,7 @@ enum 4 0 0
     doif targ ne null
         doif dead eq 0
             * Get the creature's current metaroom
-                setv va00 gmap posx posy
+                gsub get_metaroom
             * Get the metaroom's current population
                 targ ownr
                 setv va01 name va00
@@ -88,8 +118,8 @@ enum 3 4 0
     doif targ ne null
     * Don't include hatched eggs or eggs in inventory.
         doif pose ne 7 and carr ne game "c3_inventory"
-            * Get the current metaroom and convert it to decimal for storage.
-            setv va00 gmap posx posy
+            * Get the current metaroom and convert it to float for storage.
+            gsub get_metaroom
             mulv va00 1.0
             * Get the saved population.
             targ ownr
