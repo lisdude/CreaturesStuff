@@ -1,6 +1,6 @@
 ***
 * Population Indicator
-* v1.6
+* v1.7
 *
 * Add indicators for creature count and egg count to the favorite places icons.
 *
@@ -56,11 +56,11 @@ enum 1 4 0
         mulv va05 1.0
         setv va03 name va05
         targ va04
-        part 1
+        part 5
         doif stoi ptxt ne va02
             mesg wrt+ va04 1000 "creature" va02 0
         endi
-        part 2
+        part 10
         doif stoi ptxt ne va03
             mesg wrt+ va04 1000 "egg" va03 1
         endi
@@ -134,6 +134,8 @@ next
 retn
 
 * Update the text of the favorite places icons.
+* Uses 10 parts: 1-4 are creature outline, 5 is creature text, 6-9 are egg outline, 10 is egg text.
+* (this should be fine performance-wise as the text is only updated when something changes)
 * - va00: The favorite place icon.
 * - va01: The text indicator thingy.
 subr update_favorite_places
@@ -148,16 +150,52 @@ enum 1 4 0
         targ va00
         seta name "population_counter" va01
         targ va01
-        pat: fixd 1 "blank" 0 0 0 8899 "whiteontransparentchars"
         * Float relative to the favorite place icon.
         frel va00
         * Adjust down from the icon.
         flto 0 30
+        * Parts 1-4: Black outline for creature count (left, right, up, down)
+        pat: fixd 1 "blank" 0 -1 0 8899 "blackontransparentchars"
         part 1
         frmt 6 7 0 0 0 0 0
         ptxt "0"
-        pat: fixd 2 "blank" 0 0 0 8899 "whiteontransparentchars"
+        pat: fixd 2 "blank" 0 1 0 8899 "blackontransparentchars"
         part 2
+        frmt 6 7 0 0 0 0 0
+        ptxt "0"
+        pat: fixd 3 "blank" 0 0 -1 8899 "blackontransparentchars"
+        part 3
+        frmt 6 7 0 0 0 0 0
+        ptxt "0"
+        pat: fixd 4 "blank" 0 0 1 8899 "blackontransparentchars"
+        part 4
+        frmt 6 7 0 0 0 0 0
+        ptxt "0"
+        * Part 5: White creature count on top
+        pat: fixd 5 "blank" 0 0 0 8899 "whiteontransparentchars"
+        part 5
+        frmt 6 7 0 0 0 0 0
+        ptxt "0"
+        * Parts 6-9: Black outline for egg count (left, right, up, down)
+        pat: fixd 6 "blank" 0 -1 0 8899 "blackontransparentchars"
+        part 6
+        frmt 6 7 57 0 0 0 1
+        ptxt "0"
+        pat: fixd 7 "blank" 0 1 0 8899 "blackontransparentchars"
+        part 7
+        frmt 6 7 57 0 0 0 1
+        ptxt "0"
+        pat: fixd 8 "blank" 0 0 -1 8899 "blackontransparentchars"
+        part 8
+        frmt 6 7 57 0 0 0 1
+        ptxt "0"
+        pat: fixd 9 "blank" 0 0 1 8899 "blackontransparentchars"
+        part 9
+        frmt 6 7 57 0 0 0 1
+        ptxt "0"
+        * Part 10: White egg count on top
+        pat: fixd 10 "blank" 0 0 0 8899 "whiteontransparentchars"
+        part 10
         frmt 6 7 57 0 0 0 1
         ptxt "0"
     endi
@@ -219,13 +257,29 @@ slow
 tick 1
 endm
 
-* Update the indicator text.
+* Update the indicator text. Updates outline (parts 1-4/6-9) and main text (parts 5/10).
 scrp 1 1 41614 1000
     doif _p1_ eq "creature"
         part 1
         ptxt vtos _p2_
-    elif _p1_ eq "egg"
         part 2
+        ptxt vtos _p2_
+        part 3
+        ptxt vtos _p2_
+        part 4
+        ptxt vtos _p2_
+        part 5
+        ptxt vtos _p2_
+    elif _p1_ eq "egg"
+        part 6
+        ptxt vtos _p2_
+        part 7
+        ptxt vtos _p2_
+        part 8
+        ptxt vtos _p2_
+        part 9
+        ptxt vtos _p2_
+        part 10
         ptxt vtos _p2_
     endi
 endm

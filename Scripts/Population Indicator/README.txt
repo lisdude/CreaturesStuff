@@ -1,4 +1,4 @@
-Population Indicator v1.6
+Population Indicator v1.7
 -------------------------
 Add indicators for creature count and egg count to the favorite places icons.
 
@@ -19,6 +19,7 @@ Feel free to share and archive to your heart's content! All I ask is that you le
 ================================================================================================
 
 Changelog:
+v1.7            Add shadows to numbers to improve visibility.
 v1.6            Differentiate between the bridge and engineering.
 v1.5            Fix the plane so that the labels don't overlap the panels.
 v1.4            Fix errors when loading an existing world.
