@@ -1,11 +1,11 @@
 ***
 * Rotten Eggs
-* v1.1
+* v1.2
 *
 * Cause eggs older than 5 hours (customizable via ov00) to rot, contributing some nutrients to the soil.
 *
 * Author: lisdude@lisdude.com
-* Last Modified: 2024-07-01
+* Last Modified: 2026-06-09
 ***
 
 new: simp 1 1 41611 "blnk" 0 0 0
@@ -25,20 +25,26 @@ setv game "egg_rotter" 1
 scrp 1 1 41611 9
 setv va01 ov00
 enum 3 4 0
-    doif targ ne null
-        setv va00 wtik
-        subv va00 name "laid_time"
-        doif va00 ge va01 and name "gonna_hatch" eq 0
+	inst
+	doif targ ne null
+		setv va00 wtik
+		subv va00 name "laid_time"
+		doif va00 ge va01 and name "gonna_hatch" eq 0
 * The egg is older than 5 hours. Kill it and add some nutrients.
 * (Someday it might be fun to leave behind a gross sprite and let it slowly decay, but enh.)
-            doif room targ ne -1 and carr eq null
-                altr -1 3 0.2
-                altr -1 4 0.2
-            endi
-            gene kill targ 1
-            kill targ
-        endi
-    endi
+			doif room targ ne -1 and carr eq null
+				altr -1 3 0.2
+				altr -1 4 0.2
+			endi
+			sets va02 gtos 1
+			gene kill targ 1
+			kill targ
+			doif ooww va02 eq 7
+				hist wipe va02
+			endi
+		endi
+	endi
+	slow
 next
 
 endm
@@ -50,9 +56,9 @@ endm
 rscr
 delg "egg_rotter"
 enum 1 1 41611
-    kill targ
+	kill targ
 next
 scrx 1 1 41611 9
 doif game "egg_prioritizer" eq 0
-    scrx 3 4 0 10
+	scrx 3 4 0 10
 endi

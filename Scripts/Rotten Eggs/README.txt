@@ -1,4 +1,4 @@
-Rotten Eggs v1.1
+Rotten Eggs v1.2
 ------------------------
 Causes eggs older than 5 hours to rot, contributing some nutrients to the soil.
 
@@ -16,6 +16,7 @@ Existing Worlds or Updating:
 ================================================================================================
 
 Changelog:
+v1.2            Clear the unreferenced genome from the world history.
 v1.1            Set egg laid time immediately after it's created.
                 Empty the egg gene slot before killing it.
                 Ensure the egg isn't hatching before killing it.
@@ -30,5 +31,5 @@ Feel free to share and archive to your heart's content! All I ask is that you le
 ================================================================================================
 
 Author:         lisdude@lisdude.com
-Last Modified:  2024-07-01
+Last Modified:  2026-06-09
 Source Code:    https://github.com/lisdude/CreaturesStuff
